@@ -34348,7 +34348,9 @@ var Board = function Board(_a) {
       list: l,
       cards: cards.filter(matchCardByListId(l.id))
     });
-  })));
+  }), React.createElement("button", {
+    className: "List__AddList"
+  }, " + Dodaj kolejn\u0105 list\u0119")));
 };
 
 var List = function List(_a) {
@@ -34362,17 +34364,18 @@ var List = function List(_a) {
     className: "List__Cards"
   }, cards.map(function (c) {
     return React.createElement(Card, __assign({}, c));
-  })));
+  })), React.createElement("button", {
+    className: "List__AddButton"
+  }, "+ Dodaj kolejn\u0105 kart\u0119"));
 };
 
 var Card = function Card(_a) {
   var id = _a.id,
-      title = _a.title,
-      description = _a.description;
+      title = _a.title;
   return React.createElement("li", {
     key: id,
     className: "Card"
-  }, React.createElement("h3", {
+  }, React.createElement("div", {
     className: "Card__Title"
   }, title));
 };

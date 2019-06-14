@@ -26,6 +26,7 @@ const Board: React.FC<BoardProps> = ({ title, lists, cards }) => {
                 {lists.map(l => (
                     <List list={l} cards={cards.filter(matchCardByListId(l.id))} />
                 ))}
+                <button className="List__AddList"> + Dodaj kolejną listę</button>
             </ul>
         </div>
     )
@@ -39,12 +40,13 @@ const List: React.FC<ListProps> = ({ cards, list }) => (
                 <Card {...c} />
             ))}
         </ul>
+        <button className="List__AddButton">+ Dodaj kolejną kartę</button>
     </li>
 )
 
-const Card: React.FC<CardProps> = ({ id, title, description }) => (
+const Card: React.FC<CardProps> = ({ id, title }) => (
     <li key={id} className="Card">
-        <h3 className="Card__Title">{title}</h3>
+        <div className="Card__Title">{title}</div>
     </li>
 )
 

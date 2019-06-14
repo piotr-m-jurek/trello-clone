@@ -1,19 +1,23 @@
 ### Required
 
-- [x] initial render
-- [x] redux + redux-loop
-- [x] connect view to store
+- [x] Initial render
+- [x] Redux + Redux-loop
+- [x] Connect view to store
 - [x] Prepare Board route
-- [ ] Bind board to route
-- [ ] add styles for board view
+- [x] Styles for board view
+- [ ] Separate components
 - [ ] Add new list button
+  - [x] Html + Css
+  - [ ] Connect action
+  - [ ] list name validation
 - [ ] add new card button
-- [ ] add list, card actions
-- [ ] edit list name
-- [ ] list name validation
+  - [x] Html + Css
+  - [ ] Connect action
+  - [ ] card name validation
+- [ ] Edit list name
 - [ ] edit card
-- [ ] card name validation
 
+- [x] Bind board to route ???
 ### Additional
 
 - [ ] main view (boards)
