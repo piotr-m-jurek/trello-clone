@@ -1,6 +1,6 @@
 import { LoopReducer } from "redux-loop"
 import { createAction } from "../utils/typedActions"
-import { board } from "./mock"
+import { boards } from "./mock"
 import { extend } from "../utils/store"
 
 export const actions = {
@@ -10,16 +10,20 @@ export const actions = {
 
 export type Actions = ReturnType<typeof actions[keyof typeof actions]>
 
-export const initialState: Board = board
+export const initialState: AppState = {
+    boards
+}
 
-export const reducer: LoopReducer<Board, Actions> = (state, action: Actions) => {
+export const reducer: LoopReducer<AppState, Actions> = (state, action: Actions) => {
     if (!state) return initialState
     const ext = extend(state)
 
     switch (action.type) {
         case "addList":
+            const mapBoard = (b: Board) =>
+                b.id === action.payload.boardId ? { ...b, lists: [...b.lists, action.payload.list] } : b
             return ext({
-                lists: [...state.lists, action.payload.list]
+                boards: state.boards.map(mapBoard)
             })
         default:
             return state

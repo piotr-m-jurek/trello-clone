@@ -1,0 +1,13 @@
+.Board {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0079bf;
+}
+.Board__Title {
+  width: 100%;
+  color: white;
+}
+
+/*# sourceMappingURL=/src.f69400ca.css.map */

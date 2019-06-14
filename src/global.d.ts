@@ -5,7 +5,9 @@
 type MapState<TS, TO = {}> = MapStateToProps<TS, TO, RootState>
 type MapDispatch<TA, TO = {}> = MapDispatchToPropsFunction<TA, TO>
 
-type RootState = { board: Board; router: any }
+type RootState = { board: AppState; router: any }
+
+type AppState = { boards: Board[] }
 
 type Card = { id: number; listId: number; title: string; description?: string }
 type List = { id: number; title: string }

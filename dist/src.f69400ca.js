@@ -33267,18 +33267,29 @@ Object.defineProperty(exports, "__esModule", {
 var initialLists = [{
   id: 1337,
   title: "To Do"
+}, {
+  id: 69,
+  title: "Done"
 }];
 var initialCards = [{
   id: 12345,
   title: "Flight Check",
   listId: 1337
+}, {
+  id: 123,
+  title: "Packaging",
+  listId: 1337
+}, {
+  id: 987,
+  title: "Meme watching",
+  listId: 69
 }];
-exports.board = {
+exports.boards = [{
   id: 1,
   title: "KG Board",
   lists: initialLists,
   cards: initialCards
-};
+}];
 },{}],"utils/store.ts":[function(require,module,exports) {
 "use strict";
 
@@ -33333,6 +33344,22 @@ exports.cmd = function (type, c) {
 },{"redux-loop":"../node_modules/redux-loop/es/index.js"}],"store/board.ts":[function(require,module,exports) {
 "use strict";
 
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -33356,7 +33383,9 @@ exports.actions = {
     });
   }
 };
-exports.initialState = mock_1.board;
+exports.initialState = {
+  boards: mock_1.boards
+};
 
 exports.reducer = function (state, action) {
   if (!state) return exports.initialState;
@@ -33364,8 +33393,14 @@ exports.reducer = function (state, action) {
 
   switch (action.type) {
     case "addList":
+      var mapBoard = function mapBoard(b) {
+        return b.id === action.payload.boardId ? __assign({}, b, {
+          lists: b.lists.concat([action.payload.list])
+        }) : b;
+      };
+
       return ext({
-        lists: state.lists.concat([action.payload.list])
+        boards: state.boards.map(mapBoard)
       });
 
     default:
@@ -34172,21 +34207,82 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-var react_redux_1 = require("react-redux");
-
-var Hello = function Hello(_a) {
-  var text = _a.text;
-  return React.createElement("h1", null, text);
+exports.Hello = function () {
+  return React.createElement("h1", null, "Hello World!");
 };
+},{"react":"../node_modules/react/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-var mapState = function mapState(s) {
-  return {
-    text: s.board.title
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
   };
-};
 
-exports.HelloView = react_redux_1.connect(mapState, {})(Hello);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js"}],"views/BoardView.tsx":[function(require,module,exports) {
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"views/Board.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/BoardView.tsx":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -34203,19 +34299,6 @@ var __assign = this && this.__assign || function () {
   };
 
   return __assign.apply(this, arguments);
-};
-
-var __rest = this && this.__rest || function (s, e) {
-  var t = {};
-
-  for (var p in s) {
-    if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-  }
-
-  if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-    if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
-  }
-  return t;
 };
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -34236,16 +34319,66 @@ var React = __importStar(require("react"));
 
 var react_redux_1 = require("react-redux");
 
-var Board = function Board(_a) {
-  var p = __rest(_a, []);
+require("./Board.scss");
 
-  return React.createElement(React.Fragment, null, JSON.stringify(p, null, 4));
+var Board = function Board(_a) {
+  var title = _a.title,
+      lists = _a.lists,
+      cards = _a.cards;
+
+  var matchCardByListId = function matchCardByListId(colId) {
+    return function (card) {
+      return card.listId === colId;
+    };
+  };
+
+  return React.createElement("div", {
+    className: "Board"
+  }, " ", React.createElement("h1", {
+    className: "Board__Title"
+  }, title), " ", React.createElement("ul", {
+    className: "Board__Lists"
+  }, " ", lists.map(function (l) {
+    return React.createElement(List, {
+      list: l,
+      cards: cards.filter(matchCardByListId(l.id))
+    });
+  }), " "), " ");
 };
 
-var mapState = function mapState(s) {
-  // tslint:disable-next-line: no-console
-  console.log(__assign({}, s));
-  var _a = s.board,
+var List = function List(_a) {
+  var cards = _a.cards,
+      list = _a.list;
+  return React.createElement("li", {
+    className: "List"
+  }, React.createElement("h2", null, list.title), React.createElement("ul", {
+    className: "List__Cards"
+  }, cards.map(function (c) {
+    return React.createElement(Card, __assign({}, c));
+  })));
+};
+
+var Card = function Card(_a) {
+  var id = _a.id,
+      title = _a.title,
+      description = _a.description;
+  return React.createElement("li", {
+    key: id,
+    className: "Card"
+  }, React.createElement("h3", {
+    className: "Card__Title"
+  }, title), React.createElement("p", {
+    className: "Card__Description"
+  }, description));
+};
+
+var mapState = function mapState(s, op) {
+  console.log({
+    s: s,
+    op: op
+  });
+  var bId = op.match.params.id;
+  var _a = s.board.boards[+bId],
       title = _a.title,
       lists = _a.lists,
       cards = _a.cards;
@@ -34257,7 +34390,7 @@ var mapState = function mapState(s) {
 };
 
 exports.BoardView = react_redux_1.connect(mapState, {})(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js"}],"components/NoMatch.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./Board.scss":"views/Board.scss"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -34316,16 +34449,19 @@ exports.App = function () {
   }, React.createElement(react_router_dom_1.Switch, null, React.createElement(react_router_dom_1.Route, {
     path: "/",
     key: "root",
-    component: Hello_1.HelloView,
+    component: Hello_1.Hello,
     exact: true
   }), React.createElement(react_router_dom_1.Route, {
-    path: "/board/:boardId",
+    path: "/board/:id",
     key: "/board/:boardId",
     component: BoardView_1.BoardView,
     exact: true
   }), React.createElement(react_router_dom_1.Route, {
     path: "/404",
     component: NoMatch_1.NoMatch
+  }), React.createElement(react_router_dom_1.Redirect, {
+    from: "*",
+    to: "/404"
   })));
 };
 },{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","../store":"store/index.ts","connected-react-router":"../node_modules/connected-react-router/esm/index.js","../components/Hello":"components/Hello.tsx","./BoardView":"views/BoardView.tsx","../components/NoMatch":"components/NoMatch.tsx"}],"index.tsx":[function(require,module,exports) {
@@ -34386,7 +34522,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55874" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51657" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

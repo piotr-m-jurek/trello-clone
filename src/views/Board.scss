@@ -1,0 +1,11 @@
+.Board {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: rgb(0, 121, 191);
+    &__Title {
+        width: 100%;
+        color: white;
+    }
+}
