@@ -75,7 +75,7 @@
             true,
             "statics-first"
         ],
-        "prettier": [
+        "prettier":  [
             true,
             ".prettierrc"
         ]
