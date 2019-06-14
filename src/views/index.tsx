@@ -13,7 +13,6 @@ export const App = () => (
             <Route path="/" key="root" component={HelloView} exact />
             <Route path="/board/:boardId" key={"/board/:boardId"} component={BoardView} exact />
             <Route path="/404" component={NoMatch} />
-            <Redirect from="*" to="/404" />
         </Switch>
     </ConnectedRouter>
 )

@@ -1,5 +1,3 @@
-export { bindBem, block, element } from "./bem"
-
 const NArray = (length: number) => Array.apply(null, { length }).map(Number.call, Number)
 export const isEmpty = (v: any) =>
     v === undefined || v === null || v === "" || JSON.stringify(v) === "{}" || JSON.stringify(v) === "[]"

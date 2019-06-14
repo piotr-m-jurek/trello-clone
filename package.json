@@ -53,10 +53,36 @@
         "offline-plugin": "5.0.6",
         "prettier": "1.17.0",
         "ts-jest": "^24.0.2",
+        "ts-node": "^8.2.0",
         "tslint": "5.15.0",
         "tslint-config-prettier": "1.18.0",
         "tslint-consistent-codestyle": "1.15.1",
         "tslint-plugin-prettier": "2.0.1",
         "typescript": "3.4.5"
+    },
+    "jest": {
+        "transform": {
+            ".(ts|tsx)": "ts-jest"
+        },
+        "testMatch": [
+            "<rootDir>/src/**/*.spec.(ts|tsx)"
+        ],
+        "setupFiles": [
+            "<rootDir>/test/jest-setup.ts"
+        ],
+        "moduleNameMapper": {
+            "\\.(css|scss)$": "identity-obj-proxy",
+            "@/(.*)": "<rootDir>/src/$1",
+            "^.+\\.scss$": "<rootDir>/test/stub.ts",
+            "\\.(css|jpg|png|svg)$": "<rootDir>/node_modules/jest-css-modules"
+        },
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "jsx",
+            "json",
+            "node"
+        ]
     }
 }
