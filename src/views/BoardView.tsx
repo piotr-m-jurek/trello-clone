@@ -21,21 +21,19 @@ const Board: React.FC<BoardProps> = ({ title, lists, cards }) => {
 
     return (
         <div className="Board">
-            {" "}
-            <h1 className="Board__Title">{title}</h1>{" "}
+            <h1 className="Board__Title">{title}</h1>
             <ul className="Board__Lists">
-                {" "}
                 {lists.map(l => (
                     <List list={l} cards={cards.filter(matchCardByListId(l.id))} />
-                ))}{" "}
-            </ul>{" "}
+                ))}
+            </ul>
         </div>
     )
 }
 
 const List: React.FC<ListProps> = ({ cards, list }) => (
     <li className="List">
-        <h2>{list.title}</h2>
+        <h2 className="List__Title">{list.title}</h2>
         <ul className="List__Cards">
             {cards.map(c => (
                 <Card {...c} />
@@ -47,7 +45,6 @@ const List: React.FC<ListProps> = ({ cards, list }) => (
 const Card: React.FC<CardProps> = ({ id, title, description }) => (
     <li key={id} className="Card">
         <h3 className="Card__Title">{title}</h3>
-        <p className="Card__Description">{description}</p>
     </li>
 )
 

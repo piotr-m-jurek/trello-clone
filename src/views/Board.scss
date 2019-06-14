@@ -4,8 +4,56 @@
     display: flex;
     flex-direction: column;
     background: rgb(0, 121, 191);
+    padding: 16px;
     &__Title {
         width: 100%;
         color: white;
+        padding: 0 8px;
+        margin: 0
+    }
+    &__Lists {
+        display: flex;
+        flex-direction: row;
+        list-style: none;
+        padding: 0;
+        > * + * {
+            margin-left: 8px;
+        }
+    }
+}
+.List {
+    display: flex;
+    flex-direction: column;
+    width: 272px;
+    padding: 16px;
+    background: rgb(223, 225, 230);
+    border-radius: 4px;
+    max-height: 100%;
+    &__Title {
+        padding: 0;
+        margin: 0;
+    }
+    &__Cards {
+        padding: 16px 0;
+        list-style: none;
+        & > * + * {
+            margin-top: 4px;
+        }
+    }
+}
+
+.Card {
+    &__Title {
+        margin: 0;
+        background-color: #fff;
+        border-radius: 3px;
+        box-shadow: 0 1px 0 rgba(9,30,66,.25);
+        cursor: pointer;
+        display: block;
+        max-width: 300px;
+        min-height: 20px;
+        position: relative;
+        padding: 6px 8px 2px;
+
     }
 }

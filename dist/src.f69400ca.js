@@ -33369,6 +33369,8 @@ var typedActions_1 = require("../utils/typedActions");
 var mock_1 = require("./mock");
 
 var store_1 = require("../utils/store");
+/* ACTIONS */
+
 
 exports.actions = {
   increment: function increment() {
@@ -33383,9 +33385,12 @@ exports.actions = {
     });
   }
 };
+/* INITIAL STATE */
+
 exports.initialState = {
   boards: mock_1.boards
 };
+/* REDUCER */
 
 exports.reducer = function (state, action) {
   if (!state) return exports.initialState;
@@ -34334,16 +34339,16 @@ var Board = function Board(_a) {
 
   return React.createElement("div", {
     className: "Board"
-  }, " ", React.createElement("h1", {
+  }, React.createElement("h1", {
     className: "Board__Title"
-  }, title), " ", React.createElement("ul", {
+  }, title), React.createElement("ul", {
     className: "Board__Lists"
-  }, " ", lists.map(function (l) {
+  }, lists.map(function (l) {
     return React.createElement(List, {
       list: l,
       cards: cards.filter(matchCardByListId(l.id))
     });
-  }), " "), " ");
+  })));
 };
 
 var List = function List(_a) {
@@ -34351,7 +34356,9 @@ var List = function List(_a) {
       list = _a.list;
   return React.createElement("li", {
     className: "List"
-  }, React.createElement("h2", null, list.title), React.createElement("ul", {
+  }, React.createElement("h2", {
+    className: "List__Title"
+  }, list.title), React.createElement("ul", {
     className: "List__Cards"
   }, cards.map(function (c) {
     return React.createElement(Card, __assign({}, c));
@@ -34367,9 +34374,7 @@ var Card = function Card(_a) {
     className: "Card"
   }, React.createElement("h3", {
     className: "Card__Title"
-  }, title), React.createElement("p", {
-    className: "Card__Description"
-  }, description));
+  }, title));
 };
 
 var mapState = function mapState(s, op) {
