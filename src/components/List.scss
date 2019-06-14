@@ -1,0 +1,55 @@
+
+.List {
+    display: flex;
+    flex-direction: column;
+    width: 272px;
+    padding: 16px 8px 0 8px;
+    background: rgb(223, 225, 230);
+    border-radius: 4px;
+    max-height: 100%;
+    justify-content: space-between;
+    &__AddList {
+        border: none;
+        width: 272px;
+        background-color: rgba(0,0,0,.12);
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.8);;
+        border-radius: 3px;
+        height: auto;
+        min-height: 32px;
+        padding: 8px 16px;
+        display: flex;
+        flex-direction: row;
+        &:hover {
+            background: rgba(0,0,0,.24);
+        }
+        }
+    &__Title {
+        padding: 0;
+        margin: 0;
+    }
+    &__Cards {
+        padding: 16px 0;
+        list-style: none;
+        & > * + * {
+            margin-top: 8px;
+        }
+    }
+    &__AddButton {
+        padding: 8px 8px;
+        margin: 0 -8px;
+        border: none;
+        background: inherit;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        color: rgb(107, 119, 140);
+        border-radius: 0 0 3px 3px;
+
+        &:hover {
+            background-color: rgba(9,30,66,.13);
+            color: rgb(23, 43, 77);
+            text-decoration: underline;
+        }
+    }
+}

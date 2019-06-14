@@ -34287,7 +34287,36 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/BoardView.tsx":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/AddListButton.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+exports.AddListButton = function () {
+  return React.createElement("button", {
+    className: "List__AddList"
+  }, " + Dodaj kolejn\u0105 list\u0119");
+};
+},{"react":"../node_modules/react/index.js"}],"components/Card.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/Card.tsx":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -34322,52 +34351,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-var react_redux_1 = require("react-redux");
-
-require("./Board.scss");
-
-var Board = function Board(_a) {
-  var title = _a.title,
-      lists = _a.lists,
-      cards = _a.cards;
-
-  var matchCardByListId = function matchCardByListId(colId) {
-    return function (card) {
-      return card.listId === colId;
-    };
-  };
-
-  return React.createElement("div", {
-    className: "Board"
-  }, React.createElement("h1", {
-    className: "Board__Title"
-  }, title), React.createElement("ul", {
-    className: "Board__Lists"
-  }, lists.map(function (l) {
-    return React.createElement(List, {
-      list: l,
-      cards: cards.filter(matchCardByListId(l.id))
-    });
-  }), React.createElement("button", {
-    className: "List__AddList"
-  }, " + Dodaj kolejn\u0105 list\u0119")));
-};
-
-var List = function List(_a) {
-  var cards = _a.cards,
-      list = _a.list;
-  return React.createElement("li", {
-    className: "List"
-  }, React.createElement("h2", {
-    className: "List__Title"
-  }, list.title), React.createElement("ul", {
-    className: "List__Cards"
-  }, cards.map(function (c) {
-    return React.createElement(Card, __assign({}, c));
-  })), React.createElement("button", {
-    className: "List__AddButton"
-  }, "+ Dodaj kolejn\u0105 kart\u0119"));
-};
+require("./Card.scss");
 
 var Card = function Card(_a) {
   var id = _a.id,
@@ -34380,11 +34364,117 @@ var Card = function Card(_a) {
   }, title));
 };
 
+exports.CardView = function (_a) {
+  var cards = _a.cards;
+  return React.createElement(React.Fragment, null, cards.map(function (c) {
+    return React.createElement(Card, __assign({}, c));
+  }));
+};
+},{"react":"../node_modules/react/index.js","./Card.scss":"components/Card.scss"}],"components/List.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/List.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var Card_1 = require("./Card");
+
+require("./List.scss");
+
+var List = function List(_a) {
+  var cards = _a.cards,
+      list = _a.list;
+  return React.createElement("li", {
+    className: "List"
+  }, React.createElement("h2", {
+    className: "List__Title"
+  }, list.title), React.createElement("ul", {
+    className: "List__Cards"
+  }, React.createElement(Card_1.CardView, {
+    cards: cards
+  })), React.createElement("button", {
+    className: "List__AddButton"
+  }, "+ Dodaj kolejn\u0105 kart\u0119"));
+};
+
+exports.ListsView = function (_a) {
+  var lists = _a.lists,
+      cards = _a.cards;
+
+  var matchCardByListId = function matchCardByListId(colId) {
+    return function (card) {
+      return card.listId === colId;
+    };
+  };
+
+  return React.createElement(React.Fragment, null, lists.map(function (l) {
+    return React.createElement(List, {
+      list: l,
+      cards: cards.filter(matchCardByListId(l.id))
+    });
+  }));
+};
+},{"react":"../node_modules/react/index.js","./Card":"components/Card.tsx","./List.scss":"components/List.scss"}],"views/BoardView.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var react_redux_1 = require("react-redux");
+
+require("./Board.scss");
+
+var AddListButton_1 = require("../components/AddListButton");
+
+var List_1 = require("../components/List");
+
+var Board = function Board(_a) {
+  var title = _a.title,
+      lists = _a.lists,
+      cards = _a.cards;
+  return React.createElement("div", {
+    className: "Board"
+  }, React.createElement("h1", {
+    className: "Board__Title"
+  }, title), React.createElement("ul", {
+    className: "Board__Lists"
+  }, React.createElement(List_1.ListsView, {
+    lists: lists,
+    cards: cards
+  }), React.createElement(AddListButton_1.AddListButton, null)));
+};
+
 var mapState = function mapState(s, op) {
-  console.log({
-    s: s,
-    op: op
-  });
   var bId = op.match.params.id;
   var _a = s.board.boards[+bId],
       title = _a.title,
@@ -34398,7 +34488,7 @@ var mapState = function mapState(s, op) {
 };
 
 exports.BoardView = react_redux_1.connect(mapState, {})(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./Board.scss":"views/Board.scss"}],"components/NoMatch.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./Board.scss":"views/Board.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {

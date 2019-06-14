@@ -22,7 +22,17 @@
 .Board__Lists > * + * {
   margin-left: 8px;
 }
-
+.Card__Title {
+  margin: 0;
+  background-color: #fff;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
+  cursor: pointer;
+  max-width: 300px;
+  min-height: 20px;
+  position: relative;
+  padding: 6px 8px;
+}
 .List {
   display: flex;
   flex-direction: column;
@@ -38,11 +48,13 @@
   width: 272px;
   background-color: rgba(0, 0, 0, 0.12);
   cursor: pointer;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.8);
   border-radius: 3px;
   height: auto;
   min-height: 32px;
-  padding: 4px;
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: row;
 }
 .List__AddList:hover {
   background: rgba(0, 0, 0, 0.24);
@@ -56,7 +68,7 @@
   list-style: none;
 }
 .List__Cards > * + * {
-  margin-top: 4px;
+  margin-top: 8px;
 }
 .List__AddButton {
   padding: 8px 8px;
@@ -64,6 +76,8 @@
   border: none;
   background: inherit;
   display: flex;
+  flex-direction: row;
+  justify-content: start;
   color: #6b778c;
   border-radius: 0 0 3px 3px;
 }
@@ -71,18 +85,6 @@
   background-color: rgba(9, 30, 66, 0.13);
   color: #172b4d;
   text-decoration: underline;
-}
-
-.Card__Title {
-  margin: 0;
-  background-color: #fff;
-  border-radius: 3px;
-  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-  cursor: pointer;
-  max-width: 300px;
-  min-height: 20px;
-  position: relative;
-  padding: 6px 8px;
 }
 
 /*# sourceMappingURL=/src.f69400ca.css.map */
