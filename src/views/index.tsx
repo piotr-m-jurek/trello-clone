@@ -6,6 +6,7 @@ import { ConnectedRouter } from "connected-react-router"
 import { Hello } from "../components/Hello"
 import { BoardView } from "./BoardView"
 import { NoMatch } from "../components/NoMatch"
+import "./index.scss"
 
 export const App = () => (
     <ConnectedRouter history={getHistory()}>
@@ -13,7 +14,7 @@ export const App = () => (
             <Route path="/" key="root" component={Hello} exact />
             <Route path="/board/:id" key={"/board/:boardId"} component={BoardView} exact />
             <Route path="/404" component={NoMatch} />
-            <Redirect from="*" to="/404"/>
+            <Redirect from="*" to="/404" />
         </Switch>
     </ConnectedRouter>
 )

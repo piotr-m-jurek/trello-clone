@@ -1,7 +1,7 @@
 import * as React from "react"
 import { connect } from "react-redux"
 import { RouteComponentProps } from "react-router"
-import "./Board.scss"
+import "./BoardView.scss"
 import { AddListButton } from "../components/AddListButton"
 import { ListsView } from "../components/List"
 

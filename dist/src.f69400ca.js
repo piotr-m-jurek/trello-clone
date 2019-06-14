@@ -33268,6 +33268,9 @@ var initialLists = [{
   id: 1337,
   title: "To Do"
 }, {
+  id: 12,
+  title: "In Progress"
+}, {
   id: 69,
   title: "Done"
 }];
@@ -33277,7 +33280,7 @@ var initialCards = [{
   listId: 1337
 }, {
   id: 123,
-  title: "Packaging",
+  title: "Packing",
   listId: 1337
 }, {
   id: 987,
@@ -34282,7 +34285,7 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"views/Board.scss":[function(require,module,exports) {
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"views/BoardView.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -34405,11 +34408,11 @@ var List = function List(_a) {
     className: "List"
   }, React.createElement("h2", {
     className: "List__Title"
-  }, list.title), React.createElement("ul", {
+  }, list.title), cards.length > 0 ? React.createElement("ul", {
     className: "List__Cards"
   }, React.createElement(Card_1.CardView, {
     cards: cards
-  })), React.createElement("button", {
+  })) : null, React.createElement("button", {
     className: "List__AddButton"
   }, "+ Dodaj kolejn\u0105 kart\u0119"));
 };
@@ -34452,7 +34455,7 @@ var React = __importStar(require("react"));
 
 var react_redux_1 = require("react-redux");
 
-require("./Board.scss");
+require("./BoardView.scss");
 
 var AddListButton_1 = require("../components/AddListButton");
 
@@ -34488,7 +34491,7 @@ var mapState = function mapState(s, op) {
 };
 
 exports.BoardView = react_redux_1.connect(mapState, {})(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./Board.scss":"views/Board.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx"}],"components/NoMatch.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -34510,7 +34513,17 @@ var React = __importStar(require("react"));
 exports.NoMatch = function () {
   return React.createElement("h1", null, "404 not found");
 };
-},{"react":"../node_modules/react/index.js"}],"views/index.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"styles/normalize.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/index.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"../styles/normalize.scss":"styles/normalize.scss","_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -34541,6 +34554,8 @@ var BoardView_1 = require("./BoardView");
 
 var NoMatch_1 = require("../components/NoMatch");
 
+require("./index.scss");
+
 exports.App = function () {
   return React.createElement(connected_react_router_1.ConnectedRouter, {
     history: store_1.getHistory()
@@ -34562,7 +34577,7 @@ exports.App = function () {
     to: "/404"
   })));
 };
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","../store":"store/index.ts","connected-react-router":"../node_modules/connected-react-router/esm/index.js","../components/Hello":"components/Hello.tsx","./BoardView":"views/BoardView.tsx","../components/NoMatch":"components/NoMatch.tsx"}],"index.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","../store":"store/index.ts","connected-react-router":"../node_modules/connected-react-router/esm/index.js","../components/Hello":"components/Hello.tsx","./BoardView":"views/BoardView.tsx","../components/NoMatch":"components/NoMatch.tsx","./index.scss":"views/index.scss"}],"index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {

@@ -5,7 +5,7 @@
 - [x] Connect view to store
 - [x] Prepare Board route
 - [x] Styles for board view
-- [ ] Separate components
+- [x] Separate components
 - [ ] Add new list button
   - [x] Html + Css
   - [ ] Connect action
@@ -23,4 +23,4 @@
 - [ ] main view (boards)
 - [ ] new board creation
 - [ ] drag&drop research
-- [ ] drag&drop lists (change )
+- [ ] drag&drop lists ( change )

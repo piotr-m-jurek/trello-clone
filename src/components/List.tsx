@@ -10,9 +10,11 @@ type ListProps = {
 const List: React.FC<ListProps> = ({ cards, list }) => (
     <li className="List">
         <h2 className="List__Title">{list.title}</h2>
-        <ul className="List__Cards">
-            <CardView cards={cards} />
-        </ul>
+        {cards.length > 0 ? (
+            <ul className="List__Cards">
+                <CardView cards={cards} />
+            </ul>
+        ) : null}
         <button className="List__AddButton">+ Dodaj kolejną kartę</button>
     </li>
 )

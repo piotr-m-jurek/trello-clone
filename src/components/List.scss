@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     width: 272px;
-    padding: 16px 8px 0 8px;
+    padding: 8px 8px 0 8px;
     background: rgb(223, 225, 230);
     border-radius: 4px;
     max-height: 100%;
@@ -23,9 +23,9 @@
         &:hover {
             background: rgba(0,0,0,.24);
         }
-        }
+    }
     &__Title {
-        padding: 0;
+        padding: 8px 0;
         margin: 0;
     }
     &__Cards {

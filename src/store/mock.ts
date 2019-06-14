@@ -3,6 +3,7 @@ const initialLists: List[] = [
         id: 1337,
         title: "To Do"
     },
+    { id: 12, title: "In Progress" },
     {
         id: 69,
         title: "Done"
@@ -17,7 +18,7 @@ const initialCards: Card[] = [
     },
     {
         id: 123,
-        title: "Packaging",
+        title: "Packing",
         listId: 1337
     },
     {
