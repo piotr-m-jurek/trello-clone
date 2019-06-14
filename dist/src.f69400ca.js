@@ -34272,9 +34272,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-exports.NoMatch = function (_a) {
-  var text = _a.text;
-  return React.createElement("h1", null, text);
+exports.NoMatch = function () {
+  return React.createElement("h1", null, "404 not found");
 };
 },{"react":"../node_modules/react/index.js"}],"views/index.tsx":[function(require,module,exports) {
 "use strict";
@@ -34321,7 +34320,11 @@ exports.App = function () {
     component: BoardView_1.BoardView,
     exact: true
   }), React.createElement(react_router_dom_1.Route, {
+    path: "/404",
     component: NoMatch_1.NoMatch
+  }), React.createElement(react_router_dom_1.Redirect, {
+    from: "*",
+    to: "/404"
   })));
 };
 },{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","../store":"store/index.ts","connected-react-router":"../node_modules/connected-react-router/esm/index.js","../components/Hello":"components/Hello.tsx","./BoardView":"views/BoardView.tsx","../components/NoMatch":"components/NoMatch.tsx"}],"index.tsx":[function(require,module,exports) {

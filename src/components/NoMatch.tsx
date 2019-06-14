@@ -4,4 +4,4 @@ type Props = {
     text: string
 }
 
-export const NoMatch: React.FC<Props> = ({ text }) => <h1>{text}</h1>
+export const NoMatch: React.FC<Props> = () => <h1>404 not found</h1>

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Route, Switch } from "react-router-dom"
+import { Route, Switch, Redirect } from "react-router-dom"
 
 import { getHistory } from "../store"
 import { ConnectedRouter } from "connected-react-router"
@@ -12,7 +12,8 @@ export const App = () => (
         <Switch>
             <Route path="/" key="root" component={HelloView} exact />
             <Route path="/board/:boardId" key={"/board/:boardId"} component={BoardView} exact />
-            <Route component={NoMatch} />
+            <Route path="/404" component={NoMatch} />
+            <Redirect from="*" to="/404" />
         </Switch>
     </ConnectedRouter>
 )
