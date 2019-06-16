@@ -55,7 +55,7 @@ const mapState: MapState<BoardProps, OwnProps> = (s, op) => {
 const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
     const boardId = op.match.params.id
     return {
-        addList: title => dispatch(actions.addList({ boardId, list: ListCreator(shortId.generate(), title) })),
+        addList: title => dispatch(actions.addList({ boardId, list: ListCreator(title) })),
         setEditedList: list => dispatch(actions.setEditedList({ boardId, list })),
         addCard: (title, listId) =>
             dispatch(actions.addCard({ boardId, card: CardCreator(shortId.generate(), title, listId) })),

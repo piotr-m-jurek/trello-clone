@@ -23,7 +23,7 @@ const Card: React.FC<Card & CardActions> = ({ id, title, onEdited, listId, descr
             <button
                 disabled={isValidString(newTitle, 30)}
                 onClick={() => {
-                    onEdited(CardCreator(id, newTitle, listId, newDescription))
+                    onEdited(CardCreator(newTitle, listId, newDescription))
                     setEditingCard(false)
                 }}>
                 Zapisz
