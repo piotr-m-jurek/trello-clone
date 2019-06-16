@@ -9,7 +9,8 @@ import "./index.scss"
 import { MainView } from "./MainView"
 
 export const routes = {
-    board: (id: string) => `/board/${id}`
+    board: (id: string) => `/board/${id}`,
+    root: "/"
 }
 
 export const App = () => (

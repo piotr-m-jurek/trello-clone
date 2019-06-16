@@ -1,12 +1,13 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { RouteComponentProps } from "react-router-dom"
+import { RouteComponentProps, NavLink } from "react-router-dom"
 import "./BoardView.scss"
 import { AddListButton } from "../components/AddListButton"
 import { ListsView } from "../components/List"
 import { actions } from "../store/app"
 import shortId from "shortid"
 import { ListCreator, Card } from "../models"
+import { routes } from "."
 
 type BoardProps = {
     title: string
@@ -24,7 +25,12 @@ type ActionProps = {
 const Board: React.FC<BoardProps & ActionProps> = ({ title, lists, cards, addList, addCard, setEditedCard }) => {
     return (
         <div className="Board">
-            <h1 className="Board__Title">{title}</h1>
+            <div className="Board__Header">
+                <NavLink className="Header__HomeBtn" to={routes.root}>
+                    👈
+                </NavLink>
+                <h1 className="Header__Title">{title}</h1>
+            </div>
             <ul className="Board__Lists">
                 <ListsView lists={lists} cards={cards} onCardSubmit={addCard} onCardEdited={setEditedCard} />
                 <AddListButton onClick={addList} />

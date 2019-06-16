@@ -35012,6 +35012,8 @@ var React = __importStar(require("react"));
 
 var react_redux_1 = require("react-redux");
 
+var react_router_dom_1 = require("react-router-dom");
+
 require("./BoardView.scss");
 
 var AddListButton_1 = require("../components/AddListButton");
@@ -35024,6 +35026,8 @@ var shortid_1 = __importDefault(require("shortid"));
 
 var models_1 = require("../models");
 
+var _1 = require(".");
+
 var Board = function Board(_a) {
   var title = _a.title,
       lists = _a.lists,
@@ -35033,9 +35037,14 @@ var Board = function Board(_a) {
       setEditedCard = _a.setEditedCard;
   return React.createElement("div", {
     className: "Board"
-  }, React.createElement("h1", {
-    className: "Board__Title"
-  }, title), React.createElement("ul", {
+  }, React.createElement("div", {
+    className: "Board__Header"
+  }, React.createElement(react_router_dom_1.NavLink, {
+    className: "Header__HomeBtn",
+    to: _1.routes.root
+  }, "\uD83D\uDC48"), React.createElement("h1", {
+    className: "Header__Title"
+  }, title)), React.createElement("ul", {
     className: "Board__Lists"
   }, React.createElement(List_1.ListsView, {
     lists: lists,
@@ -35091,7 +35100,7 @@ var mapDispatch = function mapDispatch(dispatch, op) {
 };
 
 exports.BoardView = react_redux_1.connect(mapState, mapDispatch)(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/app":"store/app.ts","shortid":"../node_modules/shortid/index.js","../models":"models/index.ts"}],"components/NoMatch.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/app":"store/app.ts","shortid":"../node_modules/shortid/index.js","../models":"models/index.ts",".":"views/index.tsx"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -35217,7 +35226,8 @@ var MainView_1 = require("./MainView");
 exports.routes = {
   board: function board(id) {
     return "/board/" + id;
-  }
+  },
+  root: "/"
 };
 
 exports.App = function () {
