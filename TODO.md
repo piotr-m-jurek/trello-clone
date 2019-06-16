@@ -31,8 +31,8 @@
 - [ ] setup Cypress.io
 - [ ] Initial basic cypress tests
 
-- [ ] setup hooks
-- [ ] linting & testing on hooks
+- [x] setup hooks
+- [x] linting & testing on hooks
 
 
 - [ ] Default Redirect??

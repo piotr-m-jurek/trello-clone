@@ -49,6 +49,7 @@
         "@types/react-router-dom": "4.3.2",
         "@types/shortid": "0.0.29",
         "@types/uuid": "3.4.4",
+        "cypress": "^3.3.1",
         "enzyme": "3.9.0",
         "enzyme-adapter-react-16": "1.8.0",
         "husky": "^2.4.1",
