@@ -35540,14 +35540,8 @@ var models_1 = require("../models");
 
 var _1 = require(".");
 
-var Board = function Board(_a) {
-  var title = _a.title,
-      lists = _a.lists,
-      cards = _a.cards,
-      addList = _a.addList,
-      addCard = _a.addCard,
-      setEditedCard = _a.setEditedCard;
-  return React.createElement("div", {
+var Board = function Board(p) {
+  return p.type === "Err" ? React.createElement("h1", null, "Tablica nie istnieje") : React.createElement("div", {
     className: "Board"
   }, React.createElement("div", {
     className: "Board__Header"
@@ -35556,28 +35550,30 @@ var Board = function Board(_a) {
     to: _1.routes.root
   }, "\uD83D\uDC48"), React.createElement("h1", {
     className: "Header__Title"
-  }, title)), React.createElement("ul", {
+  }, p.value.title)), React.createElement("ul", {
     className: "Board__Lists"
   }, React.createElement(List_1.ListsView, {
-    lists: lists,
-    cards: cards,
-    onCardSubmit: addCard,
-    onCardEdited: setEditedCard
+    lists: p.value.lists,
+    cards: p.value.cards,
+    onCardSubmit: p.addCard,
+    onCardEdited: p.setEditedCard
   }), React.createElement(AddListButton_1.AddListButton, {
-    onClick: addList
+    onClick: p.addList
   })));
 };
 
 var mapState = function mapState(s, op) {
   var bId = op.match.params.id;
-  var _a = s.app.boards[+bId],
-      title = _a.title,
-      lists = _a.lists,
-      cards = _a.cards;
-  return {
-    title: title,
-    lists: lists,
-    cards: cards
+  var board = s.app.boards.find(function (b) {
+    return b.id === bId;
+  });
+  return board ? {
+    type: "Ok",
+    value: board
+  } : {
+    type: "Err",
+    error: null,
+    obj: null
   };
 };
 
@@ -35860,7 +35856,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55895" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56723" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -9,11 +9,7 @@ import shortId from "shortid"
 import { ListCreator, CardCreator } from "../models"
 import { routes } from "."
 
-type BoardProps = {
-    title: string
-    lists: List[]
-    cards: Card[]
-}
+type BoardProps = Result<Board, null>
 
 type ActionProps = {
     addList: F1<string>
@@ -22,18 +18,25 @@ type ActionProps = {
     setEditedCard: F1<Card>
 }
 
-const Board: React.FC<BoardProps & ActionProps> = ({ title, lists, cards, addList, addCard, setEditedCard }) => {
-    return (
+const Board: React.FC<BoardProps & ActionProps> = p => {
+    return p.type === "Err" ? (
+        <h1>Tablica nie istnieje</h1>
+    ) : (
         <div className="Board">
             <div className="Board__Header">
                 <NavLink className="Header__HomeBtn" to={routes.root}>
                     👈
                 </NavLink>
-                <h1 className="Header__Title">{title}</h1>
+                <h1 className="Header__Title">{p.value.title}</h1>
             </div>
             <ul className="Board__Lists">
-                <ListsView lists={lists} cards={cards} onCardSubmit={addCard} onCardEdited={setEditedCard} />
-                <AddListButton onClick={addList} />
+                <ListsView
+                    lists={p.value.lists}
+                    cards={p.value.cards}
+                    onCardSubmit={p.addCard}
+                    onCardEdited={p.setEditedCard}
+                />
+                <AddListButton onClick={p.addList} />
             </ul>
         </div>
     )
@@ -43,13 +46,14 @@ type BoardRouteProps = { id: string }
 type OwnProps = RouteComponentProps<BoardRouteProps>
 const mapState: MapState<BoardProps, OwnProps> = (s, op) => {
     const { id: bId } = op.match.params
-    const { title, lists, cards } = s.app.boards[+bId]
+    const board = s.app.boards.find(b => b.id === bId)!
 
-    return {
-        title,
-        lists,
-        cards
-    }
+    return board
+        ? {
+              type: "Ok",
+              value: board
+          }
+        : { type: "Err", error: null, obj: null }
 }
 
 const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
