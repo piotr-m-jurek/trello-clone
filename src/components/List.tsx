@@ -6,25 +6,64 @@ type ListProps = {
     cards: Card[]
     list: List
 }
+type ListActions = {
+    onCardSubmit: F1<string>
+}
 
-const List: React.FC<ListProps> = ({ cards, list }) => (
-    <li className="List">
-        <h2 className="List__Title">{list.title}</h2>
-        {cards.length > 0 ? (
-            <ul className="List__Cards">
-                <CardView cards={cards} />
-            </ul>
-        ) : null}
-        <button className="List__AddButton">+ Dodaj kolejną kartę</button>
-    </li>
-)
+const ListForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
+    const [input, setInput] = React.useState<string>("")
+    return (
+        <>
+            <input onChange={e => setInput(e.target.value)} value={input} />
+            <button disabled={input.length < 0} onClick={() => onSubmit(input)}>
+                Dodaj
+            </button>
+        </>
+    )
+}
 
-export const ListsView: React.FC<{ lists: List[]; cards: Card[] }> = ({ lists, cards }) => {
-    const matchCardByListId = (colId: number) => (card: Card) => card.listId === colId
+const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit }) => {
+    const [editable, setEditable] = React.useState<boolean>(false)
+
+    return (
+        <li className="List">
+            <h2 className="List__Title">{list.title}</h2>
+            {cards.length > 0 ? (
+                <ul className="List__Cards">
+                    <CardView cards={cards} />
+                </ul>
+            ) : null}
+            {!editable ? (
+                <button className="List__AddButton" onClick={() => setEditable(true)}>
+                    + Dodaj kolejną kartę
+                </button>
+            ) : (
+                <ListForm
+                    onSubmit={s => {
+                        onCardSubmit(s)
+                        setEditable(false)
+                    }}
+                />
+            )}
+        </li>
+    )
+}
+
+export const ListsView: React.FC<{ lists: List[]; cards: Card[]; onCardSubmit: F2<string, string> }> = ({
+    lists,
+    cards,
+    onCardSubmit
+}) => {
+    const matchCardByListId = (colId: string) => (card: Card) => card.listId === colId
     return (
         <>
             {lists.map(l => (
-                <List list={l} cards={cards.filter(matchCardByListId(l.id))} />
+                <List
+                    key={l.id}
+                    list={l}
+                    cards={cards.filter(matchCardByListId(l.id))}
+                    onCardSubmit={t => onCardSubmit(t, l.id)}
+                />
             ))}
         </>
     )

@@ -33265,30 +33265,30 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var initialLists = [{
-  id: 1337,
+  id: '1337',
   title: "To Do"
 }, {
-  id: 12,
+  id: '12',
   title: "In Progress"
 }, {
-  id: 69,
+  id: '69',
   title: "Done"
 }];
 var initialCards = [{
-  id: 12345,
+  id: '12345',
   title: "Flight Check",
-  listId: 1337
+  listId: '1337'
 }, {
-  id: 123,
+  id: '123',
   title: "Packing",
-  listId: 1337
+  listId: '1337'
 }, {
-  id: 987,
+  id: '987',
   title: "Meme watching",
-  listId: 69
+  listId: '69'
 }];
 exports.boards = [{
-  id: 1,
+  id: '0',
   title: "KG Board",
   lists: initialLists,
   cards: initialCards
@@ -33376,15 +33376,28 @@ var store_1 = require("../utils/store");
 
 
 exports.actions = {
-  increment: function increment() {
-    return typedActions_1.createAction("increment");
-  },
   addList: function addList(_a) {
     var boardId = _a.boardId,
         list = _a.list;
     return typedActions_1.createAction("addList", {
       boardId: boardId,
       list: list
+    });
+  },
+  setEditedList: function setEditedList(_a) {
+    var boardId = _a.boardId,
+        list = _a.list;
+    return typedActions_1.createAction("setEditedList", {
+      boardId: boardId,
+      list: list
+    });
+  },
+  addCard: function addCard(_a) {
+    var boardId = _a.boardId,
+        card = _a.card;
+    return typedActions_1.createAction("addCard", {
+      boardId: boardId,
+      card: card
     });
   }
 };
@@ -33399,16 +33412,31 @@ exports.reducer = function (state, action) {
   if (!state) return exports.initialState;
   var ext = store_1.extend(state);
 
+  var mapBoard = function mapBoard(bId) {
+    return function (op) {
+      return function (b) {
+        return b.id === bId ? __assign({}, b, op(b)) : b;
+      };
+    };
+  };
+
   switch (action.type) {
     case "addList":
-      var mapBoard = function mapBoard(b) {
-        return b.id === action.payload.boardId ? __assign({}, b, {
-          lists: b.lists.concat([action.payload.list])
-        }) : b;
-      };
-
       return ext({
-        boards: state.boards.map(mapBoard)
+        boards: state.boards.map(mapBoard(action.payload.boardId)(function (b) {
+          return {
+            lists: b.lists.concat([action.payload.list])
+          };
+        }))
+      });
+
+    case "addCard":
+      return ext({
+        boards: state.boards.map(mapBoard(action.payload.boardId)(function (b) {
+          return {
+            cards: b.cards.concat([action.payload.card])
+          };
+        }))
       });
 
     default:
@@ -34309,10 +34337,34 @@ Object.defineProperty(exports, "__esModule", {
 
 var React = __importStar(require("react"));
 
-exports.AddListButton = function () {
-  return React.createElement("button", {
-    className: "List__AddList"
-  }, " + Dodaj kolejn\u0105 list\u0119");
+exports.AddListButton = function (_a) {
+  var _onClick = _a.onClick;
+
+  var _b = React.useState(false),
+      editable = _b[0],
+      setEditable = _b[1];
+
+  var _c = React.useState(""),
+      input = _c[0],
+      setInput = _c[1];
+
+  var isListValid = input.length > 0 && input.length <= 30;
+  return !editable ? React.createElement("button", {
+    className: "List__AddList",
+    onClick: function onClick() {
+      setEditable(true);
+    }
+  }, "+ Dodaj kolejn\u0105 list\u0119") : React.createElement(React.Fragment, null, React.createElement("input", {
+    type: "text",
+    onChange: function onChange(e) {
+      return setInput(e.target.value);
+    }
+  }), React.createElement("button", {
+    disabled: !isListValid,
+    onClick: function onClick() {
+      _onClick(input);
+    }
+  }, "Add"));
 };
 },{"react":"../node_modules/react/index.js"}],"components/Card.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
@@ -34359,18 +34411,28 @@ require("./Card.scss");
 var Card = function Card(_a) {
   var id = _a.id,
       title = _a.title;
-  return React.createElement("li", {
+
+  var _b = React.useState(false),
+      editable = _b[0],
+      setEditable = _b[1];
+
+  return !editable ? React.createElement("li", {
+    className: "Card",
     key: id,
-    className: "Card"
+    onClick: function onClick() {
+      return setEditable(true);
+    }
   }, React.createElement("div", {
     className: "Card__Title"
-  }, title));
+  }, title)) : null;
 };
 
 exports.CardView = function (_a) {
   var cards = _a.cards;
   return React.createElement(React.Fragment, null, cards.map(function (c) {
-    return React.createElement(Card, __assign({}, c));
+    return React.createElement(Card, __assign({
+      key: c.id
+    }, c));
   }));
 };
 },{"react":"../node_modules/react/index.js","./Card.scss":"components/Card.scss"}],"components/List.scss":[function(require,module,exports) {
@@ -34401,9 +34463,35 @@ var Card_1 = require("./Card");
 
 require("./List.scss");
 
+var ListForm = function ListForm(_a) {
+  var onSubmit = _a.onSubmit;
+
+  var _b = React.useState(""),
+      input = _b[0],
+      setInput = _b[1];
+
+  return React.createElement(React.Fragment, null, React.createElement("input", {
+    onChange: function onChange(e) {
+      return setInput(e.target.value);
+    },
+    value: input
+  }), React.createElement("button", {
+    disabled: input.length < 0,
+    onClick: function onClick() {
+      return onSubmit(input);
+    }
+  }, "Dodaj"));
+};
+
 var List = function List(_a) {
   var cards = _a.cards,
-      list = _a.list;
+      list = _a.list,
+      onCardSubmit = _a.onCardSubmit;
+
+  var _b = React.useState(false),
+      editable = _b[0],
+      setEditable = _b[1];
+
   return React.createElement("li", {
     className: "List"
   }, React.createElement("h2", {
@@ -34412,14 +34500,23 @@ var List = function List(_a) {
     className: "List__Cards"
   }, React.createElement(Card_1.CardView, {
     cards: cards
-  })) : null, React.createElement("button", {
-    className: "List__AddButton"
-  }, "+ Dodaj kolejn\u0105 kart\u0119"));
+  })) : null, !editable ? React.createElement("button", {
+    className: "List__AddButton",
+    onClick: function onClick() {
+      return setEditable(true);
+    }
+  }, "+ Dodaj kolejn\u0105 kart\u0119") : React.createElement(ListForm, {
+    onSubmit: function onSubmit(s) {
+      onCardSubmit(s);
+      setEditable(false);
+    }
+  }));
 };
 
 exports.ListsView = function (_a) {
   var lists = _a.lists,
-      cards = _a.cards;
+      cards = _a.cards,
+      _onCardSubmit = _a.onCardSubmit;
 
   var matchCardByListId = function matchCardByListId(colId) {
     return function (card) {
@@ -34429,12 +34526,406 @@ exports.ListsView = function (_a) {
 
   return React.createElement(React.Fragment, null, lists.map(function (l) {
     return React.createElement(List, {
+      key: l.id,
       list: l,
-      cards: cards.filter(matchCardByListId(l.id))
+      cards: cards.filter(matchCardByListId(l.id)),
+      onCardSubmit: function onCardSubmit(t) {
+        return _onCardSubmit(t, l.id);
+      }
     });
   }));
 };
-},{"react":"../node_modules/react/index.js","./Card":"components/Card.tsx","./List.scss":"components/List.scss"}],"views/BoardView.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./Card":"components/Card.tsx","./List.scss":"components/List.scss"}],"../node_modules/shortid/lib/random/random-from-seed.js":[function(require,module,exports) {
+'use strict';
+
+// Found this seed-based random generator somewhere
+// Based on The Central Randomizer 1.3 (C) 1997 by Paul Houle (houle@msc.cornell.edu)
+
+var seed = 1;
+
+/**
+ * return a random number based on a seed
+ * @param seed
+ * @returns {number}
+ */
+function getNextValue() {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed/(233280.0);
+}
+
+function setSeed(_seed_) {
+    seed = _seed_;
+}
+
+module.exports = {
+    nextValue: getNextValue,
+    seed: setSeed
+};
+
+},{}],"../node_modules/shortid/lib/alphabet.js":[function(require,module,exports) {
+'use strict';
+
+var randomFromSeed = require('./random/random-from-seed');
+
+var ORIGINAL = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-';
+var alphabet;
+var previousSeed;
+
+var shuffled;
+
+function reset() {
+    shuffled = false;
+}
+
+function setCharacters(_alphabet_) {
+    if (!_alphabet_) {
+        if (alphabet !== ORIGINAL) {
+            alphabet = ORIGINAL;
+            reset();
+        }
+        return;
+    }
+
+    if (_alphabet_ === alphabet) {
+        return;
+    }
+
+    if (_alphabet_.length !== ORIGINAL.length) {
+        throw new Error('Custom alphabet for shortid must be ' + ORIGINAL.length + ' unique characters. You submitted ' + _alphabet_.length + ' characters: ' + _alphabet_);
+    }
+
+    var unique = _alphabet_.split('').filter(function(item, ind, arr){
+       return ind !== arr.lastIndexOf(item);
+    });
+
+    if (unique.length) {
+        throw new Error('Custom alphabet for shortid must be ' + ORIGINAL.length + ' unique characters. These characters were not unique: ' + unique.join(', '));
+    }
+
+    alphabet = _alphabet_;
+    reset();
+}
+
+function characters(_alphabet_) {
+    setCharacters(_alphabet_);
+    return alphabet;
+}
+
+function setSeed(seed) {
+    randomFromSeed.seed(seed);
+    if (previousSeed !== seed) {
+        reset();
+        previousSeed = seed;
+    }
+}
+
+function shuffle() {
+    if (!alphabet) {
+        setCharacters(ORIGINAL);
+    }
+
+    var sourceArray = alphabet.split('');
+    var targetArray = [];
+    var r = randomFromSeed.nextValue();
+    var characterIndex;
+
+    while (sourceArray.length > 0) {
+        r = randomFromSeed.nextValue();
+        characterIndex = Math.floor(r * sourceArray.length);
+        targetArray.push(sourceArray.splice(characterIndex, 1)[0]);
+    }
+    return targetArray.join('');
+}
+
+function getShuffled() {
+    if (shuffled) {
+        return shuffled;
+    }
+    shuffled = shuffle();
+    return shuffled;
+}
+
+/**
+ * lookup shuffled letter
+ * @param index
+ * @returns {string}
+ */
+function lookup(index) {
+    var alphabetShuffled = getShuffled();
+    return alphabetShuffled[index];
+}
+
+function get () {
+  return alphabet || ORIGINAL;
+}
+
+module.exports = {
+    get: get,
+    characters: characters,
+    seed: setSeed,
+    lookup: lookup,
+    shuffled: getShuffled
+};
+
+},{"./random/random-from-seed":"../node_modules/shortid/lib/random/random-from-seed.js"}],"../node_modules/shortid/lib/random/random-byte-browser.js":[function(require,module,exports) {
+'use strict';
+
+var crypto = typeof window === 'object' && (window.crypto || window.msCrypto); // IE 11 uses window.msCrypto
+
+var randomByte;
+
+if (!crypto || !crypto.getRandomValues) {
+    randomByte = function(size) {
+        var bytes = [];
+        for (var i = 0; i < size; i++) {
+            bytes.push(Math.floor(Math.random() * 256));
+        }
+        return bytes;
+    };
+} else {
+    randomByte = function(size) {
+        return crypto.getRandomValues(new Uint8Array(size));
+    };
+}
+
+module.exports = randomByte;
+
+},{}],"../node_modules/nanoid/format.js":[function(require,module,exports) {
+/**
+ * Secure random string generator with custom alphabet.
+ *
+ * Alphabet must contain 256 symbols or less. Otherwise, the generator
+ * will not be secure.
+ *
+ * @param {generator} random The random bytes generator.
+ * @param {string} alphabet Symbols to be used in new random string.
+ * @param {size} size The number of symbols in new random string.
+ *
+ * @return {string} Random string.
+ *
+ * @example
+ * const format = require('nanoid/format')
+ *
+ * function random (size) {
+ *   const result = []
+ *   for (let i = 0; i < size; i++) {
+ *     result.push(randomByte())
+ *   }
+ *   return result
+ * }
+ *
+ * format(random, "abcdef", 5) //=> "fbaef"
+ *
+ * @name format
+ * @function
+ */
+module.exports = function (random, alphabet, size) {
+  var mask = (2 << Math.log(alphabet.length - 1) / Math.LN2) - 1
+  var step = Math.ceil(1.6 * mask * size / alphabet.length)
+  size = +size
+
+  var id = ''
+  while (true) {
+    var bytes = random(step)
+    for (var i = 0; i < step; i++) {
+      var byte = bytes[i] & mask
+      if (alphabet[byte]) {
+        id += alphabet[byte]
+        if (id.length === size) return id
+      }
+    }
+  }
+}
+
+/**
+ * @callback generator
+ * @param {number} bytes The number of bytes to generate.
+ * @return {number[]} Random bytes.
+ */
+
+},{}],"../node_modules/shortid/lib/generate.js":[function(require,module,exports) {
+'use strict';
+
+var alphabet = require('./alphabet');
+var random = require('./random/random-byte');
+var format = require('nanoid/format');
+
+function generate(number) {
+    var loopCounter = 0;
+    var done;
+
+    var str = '';
+
+    while (!done) {
+        str = str + format(random, alphabet.get(), 1);
+        done = number < (Math.pow(16, loopCounter + 1 ) );
+        loopCounter++;
+    }
+    return str;
+}
+
+module.exports = generate;
+
+},{"./alphabet":"../node_modules/shortid/lib/alphabet.js","./random/random-byte":"../node_modules/shortid/lib/random/random-byte-browser.js","nanoid/format":"../node_modules/nanoid/format.js"}],"../node_modules/shortid/lib/build.js":[function(require,module,exports) {
+'use strict';
+
+var generate = require('./generate');
+var alphabet = require('./alphabet');
+
+// Ignore all milliseconds before a certain time to reduce the size of the date entropy without sacrificing uniqueness.
+// This number should be updated every year or so to keep the generated id short.
+// To regenerate `new Date() - 0` and bump the version. Always bump the version!
+var REDUCE_TIME = 1459707606518;
+
+// don't change unless we change the algos or REDUCE_TIME
+// must be an integer and less than 16
+var version = 6;
+
+// Counter is used when shortid is called multiple times in one second.
+var counter;
+
+// Remember the last time shortid was called in case counter is needed.
+var previousSeconds;
+
+/**
+ * Generate unique id
+ * Returns string id
+ */
+function build(clusterWorkerId) {
+    var str = '';
+
+    var seconds = Math.floor((Date.now() - REDUCE_TIME) * 0.001);
+
+    if (seconds === previousSeconds) {
+        counter++;
+    } else {
+        counter = 0;
+        previousSeconds = seconds;
+    }
+
+    str = str + generate(version);
+    str = str + generate(clusterWorkerId);
+    if (counter > 0) {
+        str = str + generate(counter);
+    }
+    str = str + generate(seconds);
+    return str;
+}
+
+module.exports = build;
+
+},{"./generate":"../node_modules/shortid/lib/generate.js","./alphabet":"../node_modules/shortid/lib/alphabet.js"}],"../node_modules/shortid/lib/is-valid.js":[function(require,module,exports) {
+'use strict';
+var alphabet = require('./alphabet');
+
+function isShortId(id) {
+    if (!id || typeof id !== 'string' || id.length < 6 ) {
+        return false;
+    }
+
+    var nonAlphabetic = new RegExp('[^' +
+      alphabet.get().replace(/[|\\{}()[\]^$+*?.-]/g, '\\$&') +
+    ']');
+    return !nonAlphabetic.test(id);
+}
+
+module.exports = isShortId;
+
+},{"./alphabet":"../node_modules/shortid/lib/alphabet.js"}],"../node_modules/shortid/lib/util/cluster-worker-id-browser.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = 0;
+
+},{}],"../node_modules/shortid/lib/index.js":[function(require,module,exports) {
+'use strict';
+
+var alphabet = require('./alphabet');
+var build = require('./build');
+var isValid = require('./is-valid');
+
+// if you are using cluster or multiple servers use this to make each instance
+// has a unique value for worker
+// Note: I don't know if this is automatically set when using third
+// party cluster solutions such as pm2.
+var clusterWorkerId = require('./util/cluster-worker-id') || 0;
+
+/**
+ * Set the seed.
+ * Highly recommended if you don't want people to try to figure out your id schema.
+ * exposed as shortid.seed(int)
+ * @param seed Integer value to seed the random alphabet.  ALWAYS USE THE SAME SEED or you might get overlaps.
+ */
+function seed(seedValue) {
+    alphabet.seed(seedValue);
+    return module.exports;
+}
+
+/**
+ * Set the cluster worker or machine id
+ * exposed as shortid.worker(int)
+ * @param workerId worker must be positive integer.  Number less than 16 is recommended.
+ * returns shortid module so it can be chained.
+ */
+function worker(workerId) {
+    clusterWorkerId = workerId;
+    return module.exports;
+}
+
+/**
+ *
+ * sets new characters to use in the alphabet
+ * returns the shuffled alphabet
+ */
+function characters(newCharacters) {
+    if (newCharacters !== undefined) {
+        alphabet.characters(newCharacters);
+    }
+
+    return alphabet.shuffled();
+}
+
+/**
+ * Generate unique id
+ * Returns string id
+ */
+function generate() {
+  return build(clusterWorkerId);
+}
+
+// Export all other functions as properties of the generate function
+module.exports = generate;
+module.exports.generate = generate;
+module.exports.seed = seed;
+module.exports.worker = worker;
+module.exports.characters = characters;
+module.exports.isValid = isValid;
+
+},{"./alphabet":"../node_modules/shortid/lib/alphabet.js","./build":"../node_modules/shortid/lib/build.js","./is-valid":"../node_modules/shortid/lib/is-valid.js","./util/cluster-worker-id":"../node_modules/shortid/lib/util/cluster-worker-id-browser.js"}],"../node_modules/shortid/index.js":[function(require,module,exports) {
+'use strict';
+module.exports = require('./lib/index');
+
+},{"./lib/index":"../node_modules/shortid/lib/index.js"}],"models/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.EmptyList = function (id, title) {
+  return {
+    id: id,
+    title: title
+  };
+};
+
+exports.Card = function (id, title, listId) {
+  return {
+    id: id,
+    title: title,
+    listId: listId
+  };
+};
+},{}],"views/BoardView.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -34445,6 +34936,12 @@ var __importStar = this && this.__importStar || function (mod) {
   }
   result["default"] = mod;
   return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
 };
 
 Object.defineProperty(exports, "__esModule", {
@@ -34461,10 +34958,18 @@ var AddListButton_1 = require("../components/AddListButton");
 
 var List_1 = require("../components/List");
 
+var board_1 = require("../store/board");
+
+var shortid_1 = __importDefault(require("shortid"));
+
+var models_1 = require("../models");
+
 var Board = function Board(_a) {
   var title = _a.title,
       lists = _a.lists,
-      cards = _a.cards;
+      cards = _a.cards,
+      addList = _a.addList,
+      addCard = _a.addCard;
   return React.createElement("div", {
     className: "Board"
   }, React.createElement("h1", {
@@ -34473,8 +34978,11 @@ var Board = function Board(_a) {
     className: "Board__Lists"
   }, React.createElement(List_1.ListsView, {
     lists: lists,
-    cards: cards
-  }), React.createElement(AddListButton_1.AddListButton, null)));
+    cards: cards,
+    onCardSubmit: addCard
+  }), React.createElement(AddListButton_1.AddListButton, {
+    onClick: addList
+  })));
 };
 
 var mapState = function mapState(s, op) {
@@ -34490,8 +34998,32 @@ var mapState = function mapState(s, op) {
   };
 };
 
-exports.BoardView = react_redux_1.connect(mapState, {})(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx"}],"components/NoMatch.tsx":[function(require,module,exports) {
+var mapDispatch = function mapDispatch(dispatch, op) {
+  var boardId = op.match.params.id;
+  return {
+    addList: function addList(title) {
+      return dispatch(board_1.actions.addList({
+        boardId: boardId,
+        list: models_1.EmptyList(shortid_1.default.generate(), title)
+      }));
+    },
+    setEditedList: function setEditedList(list) {
+      return dispatch(board_1.actions.setEditedList({
+        boardId: boardId,
+        list: list
+      }));
+    },
+    addCard: function addCard(title, listId) {
+      return dispatch(board_1.actions.addCard({
+        boardId: boardId,
+        card: models_1.Card(shortid_1.default.generate(), title, listId)
+      }));
+    }
+  };
+};
+
+exports.BoardView = react_redux_1.connect(mapState, mapDispatch)(Board);
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/board":"store/board.ts","shortid":"../node_modules/shortid/index.js","../models":"models/index.ts"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -34635,7 +35167,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51657" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50291" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -33,6 +33,7 @@
         "redux": "4.0.1",
         "redux-loop": "5.0.0",
         "sass": "^1.20.1",
+        "shortid": "^2.2.14",
         "uuid": "3.3.2"
     },
     "devDependencies": {
@@ -44,6 +45,7 @@
         "@types/react-dom": "16.8.4",
         "@types/react-redux": "7.0.6",
         "@types/react-router-dom": "4.3.2",
+        "@types/shortid": "0.0.29",
         "@types/uuid": "3.4.4",
         "enzyme": "3.9.0",
         "enzyme-adapter-react-16": "1.8.0",

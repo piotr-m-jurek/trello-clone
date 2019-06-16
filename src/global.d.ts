@@ -9,6 +9,6 @@ type RootState = { board: AppState; router: any }
 
 type AppState = { boards: Board[] }
 
-type Card = { id: number; listId: number; title: string; description?: string }
-type List = { id: number; title: string }
-type Board = { id: number; title: string; description?: string; lists: List[]; cards: Card[] }
+type Card = { id: string; listId: string; title: string; description?: string }
+type List = { id: string; title: string }
+type Board = { id: string; title: string; description?: string; lists: List[]; cards: Card[] }

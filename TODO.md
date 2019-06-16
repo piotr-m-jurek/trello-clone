@@ -7,20 +7,33 @@
 - [x] Styles for board view
 - [x] Separate components
 - [ ] Add new list button
+  - [ ] Input styling
   - [x] Html + Css
-  - [ ] Connect action
-  - [ ] list name validation
+  - [x] Connect action
+  - [x] list name validation
 - [ ] add new card button
+  - [ ] Input styling
   - [x] Html + Css
-  - [ ] Connect action
-  - [ ] card name validation
+  - [x] Connect action
+  - [x] card name validation
 - [ ] Edit list name
-- [ ] edit card
+- [ ] Edit card
 
-- [x] Bind board to route ???
+- [ ] Default Redirect
+- [x] MatchBoardId better
+
+- [x] Bind board to route
+
 ### Additional
 
-- [ ] main view (boards)
+- [ ] Boards view (boards)
 - [ ] new board creation
 - [ ] drag&drop research
 - [ ] drag&drop lists ( change )
+
+
+### Potential Refactors
+
+- [ ] Definetely consider using maps instead of arrays for lists boards and cards
+- [ ] Consider using generic board reducer to avoid mapping over boards
+- [ ] 
