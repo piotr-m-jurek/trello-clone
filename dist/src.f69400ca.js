@@ -33399,6 +33399,14 @@ exports.actions = {
       boardId: boardId,
       card: card
     });
+  },
+  setEditedCard: function setEditedCard(_a) {
+    var boardId = _a.boardId,
+        card = _a.card;
+    return typedActions_1.createAction("setEditedCard", {
+      boardId: boardId,
+      card: card
+    });
   }
 };
 /* INITIAL STATE */
@@ -33435,6 +33443,19 @@ exports.reducer = function (state, action) {
         boards: state.boards.map(mapBoard(action.payload.boardId)(function (b) {
           return {
             cards: b.cards.concat([action.payload.card])
+          };
+        }))
+      });
+
+    case "setEditedCard":
+      var editCard_1 = function editCard_1(c) {
+        return c.id === action.payload.card.id ? action.payload.card : c;
+      };
+
+      return ext({
+        boards: state.boards.map(mapBoard(action.payload.boardId)(function (b) {
+          return {
+            cards: b.cards.map(editCard_1)
           };
         }))
       });
@@ -34410,29 +34431,64 @@ require("./Card.scss");
 
 var Card = function Card(_a) {
   var id = _a.id,
-      title = _a.title;
+      title = _a.title,
+      onEdited = _a.onEdited,
+      listId = _a.listId;
 
   var _b = React.useState(false),
       editable = _b[0],
       setEditable = _b[1];
 
+  var _c = React.useState(""),
+      newTitle = _c[0],
+      setTitle = _c[1];
+
+  var _d = React.useState(""),
+      description = _d[0],
+      setDescription = _d[1];
+
   return !editable ? React.createElement("li", {
     className: "Card",
     key: id,
     onClick: function onClick() {
-      return setEditable(true);
+      setEditable(true);
+      setTitle(title);
     }
   }, React.createElement("div", {
     className: "Card__Title"
-  }, title)) : null;
+  }, title)) : React.createElement(React.Fragment, null, React.createElement("input", {
+    value: newTitle,
+    onChange: function onChange(e) {
+      return setTitle(e.target.value);
+    }
+  }), React.createElement("textarea", {
+    value: description,
+    onChange: function onChange(e) {
+      return setDescription(e.target.value);
+    }
+  }), React.createElement("button", {
+    disabled: newTitle.length <= 0,
+    onClick: function onClick() {
+      onEdited({
+        id: id,
+        title: newTitle,
+        description: description,
+        listId: listId
+      });
+      setEditable(false);
+    }
+  }, "Zapisz"));
 };
 
 exports.CardView = function (_a) {
-  var cards = _a.cards;
+  var cards = _a.cards,
+      onEdited = _a.onEdited;
   return React.createElement(React.Fragment, null, cards.map(function (c) {
     return React.createElement(Card, __assign({
       key: c.id
-    }, c));
+    }, c, {
+      onEdited: onEdited
+    }));
   }));
 };
 },{"react":"../node_modules/react/index.js","./Card.scss":"components/Card.scss"}],"components/List.scss":[function(require,module,exports) {
@@ -34486,7 +34542,8 @@ var ListForm = function ListForm(_a) {
 var List = function List(_a) {
   var cards = _a.cards,
       list = _a.list,
-      onCardSubmit = _a.onCardSubmit;
+      onCardSubmit = _a.onCardSubmit,
+      onCardEdited = _a.onCardEdited;
 
   var _b = React.useState(false),
       editable = _b[0],
@@ -34499,7 +34556,8 @@ var List = function List(_a) {
   }, list.title), cards.length > 0 ? React.createElement("ul", {
     className: "List__Cards"
   }, React.createElement(Card_1.CardView, {
-    cards: cards
+    cards: cards,
+    onEdited: onCardEdited
   })) : null, !editable ? React.createElement("button", {
     className: "List__AddButton",
     onClick: function onClick() {
@@ -34516,7 +34574,8 @@ var List = function List(_a) {
 exports.ListsView = function (_a) {
   var lists = _a.lists,
       cards = _a.cards,
-      _onCardSubmit = _a.onCardSubmit;
+      _onCardSubmit = _a.onCardSubmit,
+      onCardEdited = _a.onCardEdited;
 
   var matchCardByListId = function matchCardByListId(colId) {
     return function (card) {
@@ -34531,7 +34590,8 @@ exports.ListsView = function (_a) {
       cards: cards.filter(matchCardByListId(l.id)),
       onCardSubmit: function onCardSubmit(t) {
         return _onCardSubmit(t, l.id);
-      }
+      },
+      onCardEdited: onCardEdited
     });
   }));
 };
@@ -34969,7 +35029,8 @@ var Board = function Board(_a) {
       lists = _a.lists,
       cards = _a.cards,
       addList = _a.addList,
-      addCard = _a.addCard;
+      addCard = _a.addCard,
+      setEditedCard = _a.setEditedCard;
   return React.createElement("div", {
     className: "Board"
   }, React.createElement("h1", {
@@ -34979,7 +35040,8 @@ var Board = function Board(_a) {
   }, React.createElement(List_1.ListsView, {
     lists: lists,
     cards: cards,
-    onCardSubmit: addCard
+    onCardSubmit: addCard,
+    onCardEdited: setEditedCard
   }), React.createElement(AddListButton_1.AddListButton, {
     onClick: addList
   })));
@@ -35017,6 +35079,12 @@ var mapDispatch = function mapDispatch(dispatch, op) {
       return dispatch(board_1.actions.addCard({
         boardId: boardId,
         card: models_1.Card(shortid_1.default.generate(), title, listId)
+      }));
+    },
+    setEditedCard: function setEditedCard(card) {
+      return dispatch(board_1.actions.setEditedCard({
+        boardId: boardId,
+        card: card
       }));
     }
   };

@@ -8,6 +8,7 @@ type ListProps = {
 }
 type ListActions = {
     onCardSubmit: F1<string>
+    onCardEdited: F1<Card>
 }
 
 const ListForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
@@ -22,7 +23,7 @@ const ListForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
     )
 }
 
-const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit }) => {
+const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit, onCardEdited }) => {
     const [editable, setEditable] = React.useState<boolean>(false)
 
     return (
@@ -30,7 +31,7 @@ const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit }) 
             <h2 className="List__Title">{list.title}</h2>
             {cards.length > 0 ? (
                 <ul className="List__Cards">
-                    <CardView cards={cards} />
+                    <CardView cards={cards} onEdited={onCardEdited} />
                 </ul>
             ) : null}
             {!editable ? (
@@ -49,11 +50,14 @@ const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit }) 
     )
 }
 
-export const ListsView: React.FC<{ lists: List[]; cards: Card[]; onCardSubmit: F2<string, string> }> = ({
-    lists,
-    cards,
-    onCardSubmit
-}) => {
+type ListViewProps = {
+    lists: List[]
+    cards: Card[]
+    onCardSubmit: F2<string, string>
+    onCardEdited: F1<Card>
+}
+
+export const ListsView: React.FC<ListViewProps> = ({ lists, cards, onCardSubmit, onCardEdited }) => {
     const matchCardByListId = (colId: string) => (card: Card) => card.listId === colId
     return (
         <>
@@ -63,6 +67,7 @@ export const ListsView: React.FC<{ lists: List[]; cards: Card[]; onCardSubmit: F
                     list={l}
                     cards={cards.filter(matchCardByListId(l.id))}
                     onCardSubmit={t => onCardSubmit(t, l.id)}
+                    onCardEdited={onCardEdited}
                 />
             ))}
         </>

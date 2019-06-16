@@ -18,14 +18,15 @@ type ActionProps = {
     addList: F1<string>
     addCard: F2<string, string>
     setEditedList: F1<List>
+    setEditedCard: F1<Card>
 }
 
-const Board: React.FC<BoardProps & ActionProps> = ({ title, lists, cards, addList, addCard }) => {
+const Board: React.FC<BoardProps & ActionProps> = ({ title, lists, cards, addList, addCard, setEditedCard }) => {
     return (
         <div className="Board">
             <h1 className="Board__Title">{title}</h1>
             <ul className="Board__Lists">
-                <ListsView lists={lists} cards={cards} onCardSubmit={addCard} />
+                <ListsView lists={lists} cards={cards} onCardSubmit={addCard} onCardEdited={setEditedCard} />
                 <AddListButton onClick={addList} />
             </ul>
         </div>
@@ -51,7 +52,8 @@ const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
         addList: title => dispatch(actions.addList({ boardId, list: EmptyList(shortId.generate(), title) })),
         setEditedList: list => dispatch(actions.setEditedList({ boardId, list })),
         addCard: (title, listId) =>
-            dispatch(actions.addCard({ boardId, card: Card(shortId.generate(), title, listId) }))
+            dispatch(actions.addCard({ boardId, card: Card(shortId.generate(), title, listId) })),
+        setEditedCard: card => dispatch(actions.setEditedCard({ boardId, card }))
     }
 }
 export const BoardView = connect<BoardProps, ActionProps, {}, RootState>(
