@@ -5,9 +5,9 @@ import "./BoardView.scss"
 import { AddListButton } from "../components/AddListButton"
 import { ListsView } from "../components/List"
 import { actions } from "../store/app"
-import shortId from "shortid"
 import { ListCreator, CardCreator } from "../models"
 import { routes } from "."
+import * as shortid from "shortid"
 
 type BoardProps = Result<Board, null>
 
@@ -18,7 +18,7 @@ type ActionProps = {
     setEditedCard: F1<Card>
 }
 
-const Board: React.FC<BoardProps & ActionProps> = p => {
+const Board: React.FC<(BoardProps) & ActionProps> = p => {
     return p.type === "Err" ? (
         <h1>Tablica nie istnieje</h1>
     ) : (
@@ -59,10 +59,10 @@ const mapState: MapState<BoardProps, OwnProps> = (s, op) => {
 const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
     const boardId = op.match.params.id
     return {
-        addList: title => dispatch(actions.addList({ boardId, list: ListCreator(title) })),
+        addList: title => dispatch(actions.addList({ boardId, list: ListCreator(shortid.generate(), title) })),
         setEditedList: list => dispatch(actions.setEditedList({ boardId, list })),
         addCard: (title, listId) =>
-            dispatch(actions.addCard({ boardId, card: CardCreator(shortId.generate(), title, listId) })),
+            dispatch(actions.addCard({ boardId, card: CardCreator(shortid.generate(), title, listId) })),
         setEditedCard: card => dispatch(actions.setEditedCard({ boardId, card }))
     }
 }

@@ -34877,7 +34877,256 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/shortid/lib/random/random-from-seed.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"models/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.ListCreator = function (id, title) {
+  return {
+    id: id,
+    title: title
+  };
+};
+
+exports.CardCreator = function (id, title, listId, description) {
+  if (description === void 0) {
+    description = "";
+  }
+
+  return {
+    id: id,
+    title: title,
+    listId: listId,
+    description: description
+  };
+};
+
+exports.BoardCreator = function (id, title) {
+  return {
+    id: id,
+    title: title,
+    cards: [],
+    lists: []
+  };
+};
+
+exports.stringNonEmpty = function (s) {
+  return typeof s === "string" && s.length > 0;
+};
+
+exports.isValidString = function (s, len) {
+  if (len === void 0) {
+    len = 255;
+  }
+
+  return exports.stringNonEmpty(s) && s.length <= len;
+};
+},{}],"components/Card.tsx":[function(require,module,exports) {
+"use strict";
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+require("./Card.scss");
+
+var models_1 = require("../models");
+
+var Card = function Card(_a) {
+  var id = _a.id,
+      title = _a.title,
+      onEdited = _a.onEdited,
+      listId = _a.listId,
+      description = _a.description;
+
+  var _b = React.useState(false),
+      editingCard = _b[0],
+      setEditingCard = _b[1];
+
+  var _c = React.useState(title),
+      newTitle = _c[0],
+      setTitle = _c[1];
+
+  var _d = React.useState(description || ""),
+      newDescription = _d[0],
+      setNewDescription = _d[1];
+
+  return !editingCard ? React.createElement("li", {
+    className: "Card",
+    key: id,
+    onClick: function onClick() {
+      return setEditingCard(true);
+    }
+  }, React.createElement("div", {
+    className: "Card__Title"
+  }, title)) : React.createElement(React.Fragment, null, React.createElement("input", {
+    value: newTitle,
+    onChange: function onChange(e) {
+      return setTitle(e.target.value);
+    }
+  }), React.createElement("textarea", {
+    value: newDescription,
+    onChange: function onChange(e) {
+      return setNewDescription(e.target.value);
+    }
+  }), React.createElement("button", {
+    disabled: models_1.isValidString(newTitle, 30),
+    onClick: function onClick() {
+      onEdited(models_1.CardCreator(newTitle, listId, newDescription));
+      setEditingCard(false);
+    }
+  }, "Zapisz"));
+};
+
+exports.CardView = function (_a) {
+  var cards = _a.cards,
+      onEdited = _a.onEdited;
+  return React.createElement(React.Fragment, null, cards.map(function (c) {
+    return React.createElement(Card, __assign({
+      key: c.id
+    }, c, {
+      onEdited: onEdited
+    }));
+  }));
+};
+},{"react":"../node_modules/react/index.js","./Card.scss":"components/Card.scss","../models":"models/index.ts"}],"components/List.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/List.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var Card_1 = require("./Card");
+
+require("./List.scss");
+
+var models_1 = require("../models");
+
+var ListForm = function ListForm(_a) {
+  var onSubmit = _a.onSubmit;
+
+  var _b = React.useState(""),
+      listTitle = _b[0],
+      setListTitle = _b[1];
+
+  return React.createElement(React.Fragment, null, React.createElement("input", {
+    onChange: function onChange(e) {
+      return setListTitle(e.target.value);
+    },
+    value: listTitle
+  }), React.createElement("button", {
+    disabled: models_1.stringNonEmpty(listTitle),
+    onClick: function onClick() {
+      return onSubmit(listTitle);
+    }
+  }, "Dodaj"));
+};
+
+var List = function List(_a) {
+  var cards = _a.cards,
+      list = _a.list,
+      onCardSubmit = _a.onCardSubmit,
+      onCardEdited = _a.onCardEdited;
+
+  var _b = React.useState(false),
+      listEditing = _b[0],
+      setListEditing = _b[1];
+
+  return React.createElement("li", {
+    className: "List"
+  }, React.createElement("h2", {
+    className: "List__Title"
+  }, list.title), cards.length > 0 ? React.createElement("ul", {
+    className: "List__Cards"
+  }, React.createElement(Card_1.CardView, {
+    cards: cards,
+    onEdited: onCardEdited
+  })) : null, !listEditing ? React.createElement("button", {
+    className: "List__AddButton",
+    onClick: function onClick() {
+      return setListEditing(true);
+    }
+  }, "+ Dodaj kolejn\u0105 kart\u0119") : React.createElement(ListForm, {
+    onSubmit: function onSubmit(s) {
+      onCardSubmit(s);
+      setListEditing(false);
+    }
+  }));
+};
+
+exports.ListsView = function (_a) {
+  var lists = _a.lists,
+      cards = _a.cards,
+      _onCardSubmit = _a.onCardSubmit,
+      onCardEdited = _a.onCardEdited;
+
+  var matchCardByListId = function matchCardByListId(colId) {
+    return function (card) {
+      return card.listId === colId;
+    };
+  };
+
+  return React.createElement(React.Fragment, null, lists.map(function (l) {
+    return React.createElement(List, {
+      key: l.id,
+      list: l,
+      cards: cards.filter(matchCardByListId(l.id)),
+      onCardSubmit: function onCardSubmit(t) {
+        return _onCardSubmit(t, l.id);
+      },
+      onCardEdited: onCardEdited
+    });
+  }));
+};
+},{"react":"../node_modules/react/index.js","./Card":"components/Card.tsx","./List.scss":"components/List.scss","../models":"models/index.ts"}],"../node_modules/shortid/lib/random/random-from-seed.js":[function(require,module,exports) {
 'use strict';
 
 // Found this seed-based random generator somewhere
@@ -35246,157 +35495,7 @@ module.exports.isValid = isValid;
 'use strict';
 module.exports = require('./lib/index');
 
-},{"./lib/index":"../node_modules/shortid/lib/index.js"}],"models/index.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var shortid = require("shortid");
-
-exports.ListCreator = function (title) {
-  return {
-    id: shortid.generate(),
-    title: title
-  };
-};
-
-exports.CardCreator = function (title, listId, description) {
-  if (description === void 0) {
-    description = "";
-  }
-
-  return {
-    id: shortid.generate(),
-    title: title,
-    listId: listId,
-    description: description
-  };
-};
-
-exports.BoardCreator = function (title) {
-  return {
-    id: shortid.generate(),
-    title: title,
-    cards: [],
-    lists: []
-  };
-};
-
-exports.stringNonEmpty = function (s) {
-  return typeof s === "string" && s.length > 0;
-};
-
-exports.isValidString = function (s, len) {
-  if (len === void 0) {
-    len = 255;
-  }
-
-  return exports.stringNonEmpty(s) && s.length <= len;
-};
-},{"shortid":"../node_modules/shortid/index.js"}],"components/Card.tsx":[function(require,module,exports) {
-"use strict";
-
-var __assign = this && this.__assign || function () {
-  __assign = Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-
-      for (var p in s) {
-        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-      }
-    }
-
-    return t;
-  };
-
-  return __assign.apply(this, arguments);
-};
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-require("./Card.scss");
-
-var models_1 = require("../models");
-
-var Card = function Card(_a) {
-  var id = _a.id,
-      title = _a.title,
-      onEdited = _a.onEdited,
-      listId = _a.listId,
-      description = _a.description;
-
-  var _b = React.useState(false),
-      editingCard = _b[0],
-      setEditingCard = _b[1];
-
-  var _c = React.useState(title),
-      newTitle = _c[0],
-      setTitle = _c[1];
-
-  var _d = React.useState(description || ""),
-      newDescription = _d[0],
-      setNewDescription = _d[1];
-
-  return !editingCard ? React.createElement("li", {
-    className: "Card",
-    key: id,
-    onClick: function onClick() {
-      return setEditingCard(true);
-    }
-  }, React.createElement("div", {
-    className: "Card__Title"
-  }, title)) : React.createElement(React.Fragment, null, React.createElement("input", {
-    value: newTitle,
-    onChange: function onChange(e) {
-      return setTitle(e.target.value);
-    }
-  }), React.createElement("textarea", {
-    value: newDescription,
-    onChange: function onChange(e) {
-      return setNewDescription(e.target.value);
-    }
-  }), React.createElement("button", {
-    disabled: models_1.isValidString(newTitle, 30),
-    onClick: function onClick() {
-      onEdited(models_1.CardCreator(newTitle, listId, newDescription));
-      setEditingCard(false);
-    }
-  }, "Zapisz"));
-};
-
-exports.CardView = function (_a) {
-  var cards = _a.cards,
-      onEdited = _a.onEdited;
-  return React.createElement(React.Fragment, null, cards.map(function (c) {
-    return React.createElement(Card, __assign({
-      key: c.id
-    }, c, {
-      onEdited: onEdited
-    }));
-  }));
-};
-},{"react":"../node_modules/react/index.js","./Card.scss":"components/Card.scss","../models":"models/index.ts"}],"components/List.scss":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/List.tsx":[function(require,module,exports) {
+},{"./lib/index":"../node_modules/shortid/lib/index.js"}],"views/BoardView.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -35407,113 +35506,6 @@ var __importStar = this && this.__importStar || function (mod) {
   }
   result["default"] = mod;
   return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-var Card_1 = require("./Card");
-
-require("./List.scss");
-
-var models_1 = require("../models");
-
-var ListForm = function ListForm(_a) {
-  var onSubmit = _a.onSubmit;
-
-  var _b = React.useState(""),
-      listTitle = _b[0],
-      setListTitle = _b[1];
-
-  return React.createElement(React.Fragment, null, React.createElement("input", {
-    onChange: function onChange(e) {
-      return setListTitle(e.target.value);
-    },
-    value: listTitle
-  }), React.createElement("button", {
-    disabled: models_1.stringNonEmpty(listTitle),
-    onClick: function onClick() {
-      return onSubmit(listTitle);
-    }
-  }, "Dodaj"));
-};
-
-var List = function List(_a) {
-  var cards = _a.cards,
-      list = _a.list,
-      onCardSubmit = _a.onCardSubmit,
-      onCardEdited = _a.onCardEdited;
-
-  var _b = React.useState(false),
-      listEditing = _b[0],
-      setListEditing = _b[1];
-
-  return React.createElement("li", {
-    className: "List"
-  }, React.createElement("h2", {
-    className: "List__Title"
-  }, list.title), cards.length > 0 ? React.createElement("ul", {
-    className: "List__Cards"
-  }, React.createElement(Card_1.CardView, {
-    cards: cards,
-    onEdited: onCardEdited
-  })) : null, !listEditing ? React.createElement("button", {
-    className: "List__AddButton",
-    onClick: function onClick() {
-      return setListEditing(true);
-    }
-  }, "+ Dodaj kolejn\u0105 kart\u0119") : React.createElement(ListForm, {
-    onSubmit: function onSubmit(s) {
-      onCardSubmit(s);
-      setListEditing(false);
-    }
-  }));
-};
-
-exports.ListsView = function (_a) {
-  var lists = _a.lists,
-      cards = _a.cards,
-      _onCardSubmit = _a.onCardSubmit,
-      onCardEdited = _a.onCardEdited;
-
-  var matchCardByListId = function matchCardByListId(colId) {
-    return function (card) {
-      return card.listId === colId;
-    };
-  };
-
-  return React.createElement(React.Fragment, null, lists.map(function (l) {
-    return React.createElement(List, {
-      key: l.id,
-      list: l,
-      cards: cards.filter(matchCardByListId(l.id)),
-      onCardSubmit: function onCardSubmit(t) {
-        return _onCardSubmit(t, l.id);
-      },
-      onCardEdited: onCardEdited
-    });
-  }));
-};
-},{"react":"../node_modules/react/index.js","./Card":"components/Card.tsx","./List.scss":"components/List.scss","../models":"models/index.ts"}],"views/BoardView.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
 };
 
 Object.defineProperty(exports, "__esModule", {
@@ -35534,11 +35526,11 @@ var List_1 = require("../components/List");
 
 var app_1 = require("../store/app");
 
-var shortid_1 = __importDefault(require("shortid"));
-
 var models_1 = require("../models");
 
 var _1 = require(".");
+
+var shortid = __importStar(require("shortid"));
 
 var Board = function Board(p) {
   return p.type === "Err" ? React.createElement("h1", null, "Tablica nie istnieje") : React.createElement("div", {
@@ -35583,7 +35575,7 @@ var mapDispatch = function mapDispatch(dispatch, op) {
     addList: function addList(title) {
       return dispatch(app_1.actions.addList({
         boardId: boardId,
-        list: models_1.ListCreator(title)
+        list: models_1.ListCreator(shortid.generate(), title)
       }));
     },
     setEditedList: function setEditedList(list) {
@@ -35595,7 +35587,7 @@ var mapDispatch = function mapDispatch(dispatch, op) {
     addCard: function addCard(title, listId) {
       return dispatch(app_1.actions.addCard({
         boardId: boardId,
-        card: models_1.CardCreator(shortid_1.default.generate(), title, listId)
+        card: models_1.CardCreator(shortid.generate(), title, listId)
       }));
     },
     setEditedCard: function setEditedCard(card) {
@@ -35608,7 +35600,7 @@ var mapDispatch = function mapDispatch(dispatch, op) {
 };
 
 exports.BoardView = react_redux_1.connect(mapState, mapDispatch)(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/app":"store/app.ts","shortid":"../node_modules/shortid/index.js","../models":"models/index.ts",".":"views/index.tsx"}],"components/NoMatch.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/app":"store/app.ts","../models":"models/index.ts",".":"views/index.tsx","shortid":"../node_modules/shortid/index.js"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -35676,6 +35668,8 @@ var models_1 = require("../models");
 
 var app_1 = require("../store/app");
 
+var shortid = require("shortid");
+
 var Main = function Main(_a) {
   var boards = _a.boards,
       createBoard = _a.createBoard;
@@ -35717,7 +35711,7 @@ var Main = function Main(_a) {
   }), React.createElement("button", {
     onClick: function onClick() {
       setBoardEditing(false);
-      createBoard(models_1.BoardCreator(boardTitle));
+      createBoard(models_1.BoardCreator(shortid.generate(), boardTitle));
     }
   }, "Stw\xF3rz"))));
 };
@@ -35737,7 +35731,7 @@ var mapDispatch = function mapDispatch(dispatch) {
 };
 
 exports.MainView = react_redux_1.connect(mapState, mapDispatch)(Main);
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js",".":"views/index.tsx","react-redux":"../node_modules/react-redux/es/index.js","./MainView.scss":"views/MainView.scss","../models":"models/index.ts","../store/app":"store/app.ts"}],"views/index.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js",".":"views/index.tsx","react-redux":"../node_modules/react-redux/es/index.js","./MainView.scss":"views/MainView.scss","../models":"models/index.ts","../store/app":"store/app.ts","shortid":"../node_modules/shortid/index.js"}],"views/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {

@@ -5,6 +5,7 @@ import { connect } from "react-redux"
 import "./MainView.scss"
 import { BoardCreator } from "../models"
 import { actions } from "../store/app"
+import shortid = require("shortid")
 
 type MainProps = {
     boards: Board[]
@@ -37,7 +38,7 @@ const Main: React.FC<MainProps & MainActions> = ({ boards, createBoard }) => {
                         <button
                             onClick={() => {
                                 setBoardEditing(false)
-                                createBoard(BoardCreator(boardTitle))
+                                createBoard(BoardCreator(shortid.generate(), boardTitle))
                             }}>
                             Stwórz
                         </button>

@@ -11,4 +11,4 @@ type AppState = { boards: Board[] }
 
 type Card = { id: string; listId: string; title: string; description?: string }
 type List = { id: string; title: string }
-type Board = { id: string; title: string; description?: string; lists: List[]; cards: Card[] }
+type Board = { id: string; title: string; lists: List[]; cards: Card[] }
