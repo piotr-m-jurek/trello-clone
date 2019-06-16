@@ -26,8 +26,9 @@
 
 ### Additional
 
-- [ ] Default Redirect??
+- [x] basic state persistence
 - [x] Boards view (boards)
+- [ ] Default Redirect??
 - [ ] new board creation
 - [ ] drag&drop research
 - [ ] drag&drop lists ( change )
