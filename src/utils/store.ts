@@ -17,3 +17,5 @@ export const cmd = (type: string, c: () => void) =>
         successActionCreator: () => ({ type: `${type}Success` }),
         failActionCreator: () => ({ type: `${type}Failed` })
     })
+
+export const isDef = <T>(value: T | null): value is T => Boolean(value)

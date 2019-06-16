@@ -1,26 +1,26 @@
 import * as React from "react"
 
 export const AddListButton: React.FC<{ onClick: F1<string> }> = ({ onClick }) => {
-    const [editable, setEditable] = React.useState<boolean>(false)
-    const [input, setInput] = React.useState<string>("")
+    const [listEditing, setListEditing] = React.useState(false)
+    const [listTitle, setListTitle] = React.useState("")
 
-    const isListValid = input.length > 0 && input.length <= 30
+    const isListValid = listTitle.length > 0 && listTitle.length <= 30
 
-    return !editable ? (
+    return !listEditing ? (
         <button
             className="List__AddList"
             onClick={() => {
-                setEditable(true)
+                setListEditing(true)
             }}>
             + Dodaj kolejną listę
         </button>
     ) : (
         <>
-            <input type="text" onChange={e => setInput(e.target.value)} />
+            <input type="text" onChange={e => setListTitle(e.target.value)} />
             <button
                 disabled={!isListValid}
                 onClick={() => {
-                    onClick(input)
+                    onClick(listTitle)
                 }}>
                 Add
             </button>

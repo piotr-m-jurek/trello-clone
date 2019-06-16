@@ -10,7 +10,8 @@ export const actions = {
         createAction("setEditedList", { boardId, list }),
     addCard: ({ boardId, card }: { boardId: string; card: Card }) => createAction("addCard", { boardId, card }),
     setEditedCard: ({ boardId, card }: { boardId: string; card: Card }) =>
-        createAction("setEditedCard", { boardId, card })
+        createAction("setEditedCard", { boardId, card }),
+    createBoard: (board: Board) => createAction("createBoard", board)
 }
 export type Actions = ReturnType<typeof actions[keyof typeof actions]>
 
@@ -43,6 +44,10 @@ export const reducer: LoopReducer<AppState, Actions> = (state, action: Actions) 
             const editCard = (c: Card) => (c.id === action.payload.card.id ? action.payload.card : c)
             return ext({
                 boards: state.boards.map(mapBoard(action.payload.boardId)(b => ({ cards: b.cards.map(editCard) })))
+            })
+        case "createBoard":
+            return ext({
+                boards: [...state.boards, action.payload]
             })
         default:
             return state

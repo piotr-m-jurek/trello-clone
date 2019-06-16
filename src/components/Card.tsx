@@ -1,34 +1,30 @@
 import * as React from "react"
 import "./Card.scss"
+import { isValidString, CardCreator } from "../models"
 
 type CardActions = {
     onEdited: F1<Card>
 }
 
-const Card: React.FC<Card & CardActions> = ({ id, title, onEdited, listId }) => {
-    const [editable, setEditable] = React.useState<boolean>(false)
-    const [newTitle, setTitle] = React.useState<string>("")
-    const [description, setDescription] = React.useState<string>("")
+const Card: React.FC<Card & CardActions> = ({ id, title, onEdited, listId, description }) => {
+    const [editingCard, setEditingCard] = React.useState(false)
 
-    return !editable ? (
-        <li
-            className="Card"
-            key={id}
-            onClick={() => {
-                setEditable(true)
-                setTitle(title)
-            }}>
+    const [newTitle, setTitle] = React.useState(title)
+    const [newDescription, setNewDescription] = React.useState(description || "")
+
+    return !editingCard ? (
+        <li className="Card" key={id} onClick={() => setEditingCard(true)}>
             <div className="Card__Title">{title}</div>
         </li>
     ) : (
         <>
             <input value={newTitle} onChange={e => setTitle(e.target.value)} />
-            <textarea value={description} onChange={e => setDescription(e.target.value)} />
+            <textarea value={newDescription} onChange={e => setNewDescription(e.target.value)} />
             <button
-                disabled={newTitle.length <= 0}
+                disabled={isValidString(newTitle, 30)}
                 onClick={() => {
-                    onEdited({ id, title: newTitle, description, listId })
-                    setEditable(false)
+                    onEdited(CardCreator(id, newTitle, listId, newDescription))
+                    setEditingCard(false)
                 }}>
                 Zapisz
             </button>

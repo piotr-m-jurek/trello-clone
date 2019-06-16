@@ -6,7 +6,7 @@ import { AddListButton } from "../components/AddListButton"
 import { ListsView } from "../components/List"
 import { actions } from "../store/app"
 import shortId from "shortid"
-import { ListCreator, Card } from "../models"
+import { ListCreator, CardCreator } from "../models"
 import { routes } from "."
 
 type BoardProps = {
@@ -58,7 +58,7 @@ const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
         addList: title => dispatch(actions.addList({ boardId, list: ListCreator(shortId.generate(), title) })),
         setEditedList: list => dispatch(actions.setEditedList({ boardId, list })),
         addCard: (title, listId) =>
-            dispatch(actions.addCard({ boardId, card: Card(shortId.generate(), title, listId) })),
+            dispatch(actions.addCard({ boardId, card: CardCreator(shortId.generate(), title, listId) })),
         setEditedCard: card => dispatch(actions.setEditedCard({ boardId, card }))
     }
 }

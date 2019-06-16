@@ -51,9 +51,11 @@
         "@types/uuid": "3.4.4",
         "enzyme": "3.9.0",
         "enzyme-adapter-react-16": "1.8.0",
+        "husky": "^2.4.1",
         "identity-obj-proxy": "3.0.0",
         "jest": "24.7.1",
         "jest-css-modules": "1.1.0",
+        "lint-staged": "^8.2.1",
         "offline-plugin": "5.0.6",
         "prettier": "^1.18.2",
         "ts-jest": "^24.0.2",
@@ -87,6 +89,18 @@
             "jsx",
             "json",
             "node"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged",
+            "pre-push": "npm run lint && npm test"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "npx prettier --config .prettierrc --write",
+            "git add"
         ]
     }
 }

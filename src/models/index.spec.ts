@@ -1,4 +1,4 @@
-import { Card, ListCreator, isValidString, stringNonEmpty } from "."
+import { CardCreator, ListCreator, isValidString, stringNonEmpty } from "."
 
 describe("models", () => {
     describe("constructor", () => {
@@ -9,8 +9,8 @@ describe("models", () => {
                 listId: "69",
                 description: ""
             }
-            expect(Card("1", "abc", "69")).toEqual(c)
-            expect(Card("1", "abc", "69", "desc")).toEqual({
+            expect(CardCreator("1", "abc", "69")).toEqual(c)
+            expect(CardCreator("1", "abc", "69", "desc")).toEqual({
                 ...c,
                 description: "desc"
             })

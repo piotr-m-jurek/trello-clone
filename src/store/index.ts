@@ -5,6 +5,7 @@ import { createBrowserHistory } from "history"
 import * as app from "./app"
 import { saveState, loadState } from "./localStorage"
 import throttle from "lodash.throttle"
+import { isDef } from "../utils/store"
 
 let _history: ReturnType<typeof createBrowserHistory> = null as any
 export const getHistory = () => {
@@ -18,9 +19,10 @@ const initialState: RootState = { app: app.initialState, router: null }
 
 const initStore = () => {
     const { __REDUX_DEVTOOLS_EXTENSION__ = () => (f: any) => f } = window as any
+    const init: RootState = { app: loadState() || initialState.app, router: initialState.router }
     return createStore(
         combineReducers<any>({ app: app.reducer, router: connectRouter(getHistory()) }),
-        (loadState() || initialState) as any,
+        init as any,
         compose(
             install(),
             __REDUX_DEVTOOLS_EXTENSION__(),
@@ -30,7 +32,7 @@ const initStore = () => {
 }
 
 export const getStore = () => {
-    if (!_store) {
+    if (!isDef(_store)) {
         _store = initStore()
     }
     return _store

@@ -1,39 +1,52 @@
-### Required
+## Required
 
+### Done
 - [x] Initial render
 - [x] Redux + Redux-loop
 - [x] Connect view to store
 - [x] Prepare Board route
 - [x] Styles for board view
 - [x] Separate components
-- [ ] Add new list button
-  - [ ] Input styling
-  - [x] Html + Css
+- [x] Add new list button
   - [x] Connect action
   - [x] list name validation
-- [ ] add new card button
-  - [ ] Input styling
+- [x] Add new card button
   - [x] Html + Css
   - [x] Connect action
   - [x] card name validation
-- [ ] Edit list name
 - [x] Edit card
-- [ ] Edit card styling
-
 
 - [x] MatchBoardId better
 - [x] Bind board to route
 
-### Additional
+### TODO:
+- [ ] [CSS] New List
+- [ ] [CSS] New Card
+- [ ] [CSS]Edit card
+- [ ] [CSS] Edit List
+- [ ] Edit list
 
-- [x] basic state persistence
-- [x] Boards view (boards)
+## Additional
+
+- [ ] setup Cypress.io
+- [ ] Initial basic cypress tests
+
+- [ ] setup hooks
+- [ ] linting & testing on hooks
+
+
 - [ ] Default Redirect??
-- [ ] new board creation
+- [ ] [CSS] New Board form
+
 - [ ] drag&drop research
+- [ ] install DnD library
 - [ ] drag&drop lists ( change )
 - [ ] drag&drop cards
 
+### Done
+- [x] basic state persistence
+- [x] Boards view (boards)
+- [x] new board creation
 
 ### Potential Refactors
 
@@ -42,4 +55,4 @@
 - [ ] default view for no board exisiting in the system
 - [ ] tests for mapBoard function from reducer
 - [ ] Cleanup in Card/List name edition
-- [ ]
+- [ ] Use ADTs instead of undefined/nullalbe values

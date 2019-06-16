@@ -1,6 +1,7 @@
 import * as React from "react"
 import { CardView } from "./Card"
 import "./List.scss"
+import { stringNonEmpty } from "../models"
 
 type ListProps = {
     cards: Card[]
@@ -12,11 +13,11 @@ type ListActions = {
 }
 
 const ListForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
-    const [input, setInput] = React.useState<string>("")
+    const [listTitle, setListTitle] = React.useState("")
     return (
         <>
-            <input onChange={e => setInput(e.target.value)} value={input} />
-            <button disabled={input.length < 0} onClick={() => onSubmit(input)}>
+            <input onChange={e => setListTitle(e.target.value)} value={listTitle} />
+            <button disabled={stringNonEmpty(listTitle)} onClick={() => onSubmit(listTitle)}>
                 Dodaj
             </button>
         </>
@@ -24,7 +25,7 @@ const ListForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
 }
 
 const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit, onCardEdited }) => {
-    const [editable, setEditable] = React.useState<boolean>(false)
+    const [listEditing, setListEditing] = React.useState(false)
 
     return (
         <li className="List">
@@ -34,15 +35,15 @@ const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit, on
                     <CardView cards={cards} onEdited={onCardEdited} />
                 </ul>
             ) : null}
-            {!editable ? (
-                <button className="List__AddButton" onClick={() => setEditable(true)}>
+            {!listEditing ? (
+                <button className="List__AddButton" onClick={() => setListEditing(true)}>
                     + Dodaj kolejną kartę
                 </button>
             ) : (
                 <ListForm
                     onSubmit={s => {
                         onCardSubmit(s)
-                        setEditable(false)
+                        setListEditing(false)
                     }}
                 />
             )}
