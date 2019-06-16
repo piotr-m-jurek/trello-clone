@@ -5,7 +5,7 @@
 type MapState<TS, TO = {}> = MapStateToProps<TS, TO, RootState>
 type MapDispatch<TA, TO = {}> = MapDispatchToPropsFunction<TA, TO>
 
-type RootState = { board: AppState; router: any }
+type RootState = { app: AppState; router: any }
 
 type AppState = { boards: Board[] }
 

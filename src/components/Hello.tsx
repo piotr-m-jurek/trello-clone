@@ -5,4 +5,3 @@ type Props = {
 }
 
 export const Hello: React.FC<Props> = () => <h1>Hello World!</h1>
-

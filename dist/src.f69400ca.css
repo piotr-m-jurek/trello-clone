@@ -435,5 +435,52 @@ html, body {
 * {
   box-sizing: border-box;
 }
+@import url("https://fonts.googleapis.com/css?family=Lato:300,700&display=swap");
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 300;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.Main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+.Main__Boards {
+  display: flex;
+  flex-wrap: wrap;
+}
+.Main__Boards > * + * {
+  margin-left: 24px;
+}
+
+.Tile {
+  height: 100px;
+  width: 250px;
+  background: #0079bf;
+  display: flex;
+  text-decoration: none;
+  border-radius: 3px;
+  padding: 24px 16px;
+}
+.Tile:hover {
+  box-shadow: 2px 2px 0 rgba(9, 30, 66, 0.35);
+}
+.Tile__Title {
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+}
+.Tile__Title:visited, .Tile__Title:active, .Tile__Title:focus {
+  color: #fff;
+}
 
 /*# sourceMappingURL=/src.f69400ca.css.map */

@@ -33265,33 +33265,38 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var initialLists = [{
-  id: '1337',
+  id: "1337",
   title: "To Do"
 }, {
-  id: '12',
+  id: "12",
   title: "In Progress"
 }, {
-  id: '69',
+  id: "69",
   title: "Done"
 }];
 var initialCards = [{
-  id: '12345',
+  id: "12345",
   title: "Flight Check",
-  listId: '1337'
+  listId: "1337"
 }, {
-  id: '123',
+  id: "123",
   title: "Packing",
-  listId: '1337'
+  listId: "1337"
 }, {
-  id: '987',
+  id: "987",
   title: "Meme watching",
-  listId: '69'
+  listId: "69"
 }];
 exports.boards = [{
-  id: '0',
+  id: "0",
   title: "KG Board",
   lists: initialLists,
   cards: initialCards
+}, {
+  id: "1",
+  title: "test board",
+  lists: [],
+  cards: []
 }];
 },{}],"utils/store.ts":[function(require,module,exports) {
 "use strict";
@@ -33344,7 +33349,7 @@ exports.cmd = function (type, c) {
     }
   });
 };
-},{"redux-loop":"../node_modules/redux-loop/es/index.js"}],"store/board.ts":[function(require,module,exports) {
+},{"redux-loop":"../node_modules/redux-loop/es/index.js"}],"store/app.ts":[function(require,module,exports) {
 "use strict";
 
 var __assign = this && this.__assign || function () {
@@ -33489,7 +33494,7 @@ var connected_react_router_1 = require("connected-react-router");
 
 var history_1 = require("history");
 
-var board = __importStar(require("./board"));
+var app = __importStar(require("./app"));
 
 var _history = null;
 
@@ -33500,7 +33505,7 @@ exports.getHistory = function () {
 
 var _store = null;
 var initialState = {
-  board: board.initialState,
+  app: app.initialState,
   router: null
 };
 
@@ -33513,7 +33518,7 @@ var initStore = function initStore() {
   } : _a;
 
   return redux_1.createStore(redux_loop_1.combineReducers({
-    board: board.reducer,
+    app: app.reducer,
     router: connected_react_router_1.connectRouter(exports.getHistory())
   }), initialState, redux_1.compose(redux_loop_1.install(), __REDUX_DEVTOOLS_EXTENSION__(), redux_1.applyMiddleware(connected_react_router_1.routerMiddleware(exports.getHistory()))));
 };
@@ -33525,7 +33530,7 @@ exports.getStore = function () {
 
   return _store;
 };
-},{"redux-loop":"../node_modules/redux-loop/es/index.js","redux":"../node_modules/redux/es/redux.js","connected-react-router":"../node_modules/connected-react-router/esm/index.js","history":"../node_modules/history/esm/history.js","./board":"store/board.ts"}],"../node_modules/react-router-dom/es/Router.js":[function(require,module,exports) {
+},{"redux-loop":"../node_modules/redux-loop/es/index.js","redux":"../node_modules/redux/es/redux.js","connected-react-router":"../node_modules/connected-react-router/esm/index.js","history":"../node_modules/history/esm/history.js","./app":"store/app.ts"}],"../node_modules/react-router-dom/es/Router.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34245,29 +34250,7 @@ var _matchPath2 = _interopRequireDefault(require("./matchPath"));
 var _withRouter2 = _interopRequireDefault(require("./withRouter"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./BrowserRouter":"../node_modules/react-router-dom/es/BrowserRouter.js","./HashRouter":"../node_modules/react-router-dom/es/HashRouter.js","./Link":"../node_modules/react-router-dom/es/Link.js","./MemoryRouter":"../node_modules/react-router-dom/es/MemoryRouter.js","./NavLink":"../node_modules/react-router-dom/es/NavLink.js","./Prompt":"../node_modules/react-router-dom/es/Prompt.js","./Redirect":"../node_modules/react-router-dom/es/Redirect.js","./Route":"../node_modules/react-router-dom/es/Route.js","./Router":"../node_modules/react-router-dom/es/Router.js","./StaticRouter":"../node_modules/react-router-dom/es/StaticRouter.js","./Switch":"../node_modules/react-router-dom/es/Switch.js","./generatePath":"../node_modules/react-router-dom/es/generatePath.js","./matchPath":"../node_modules/react-router-dom/es/matchPath.js","./withRouter":"../node_modules/react-router-dom/es/withRouter.js"}],"components/Hello.tsx":[function(require,module,exports) {
-"use strict";
-
-var __importStar = this && this.__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-exports.Hello = function () {
-  return React.createElement("h1", null, "Hello World!");
-};
-},{"react":"../node_modules/react/index.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./BrowserRouter":"../node_modules/react-router-dom/es/BrowserRouter.js","./HashRouter":"../node_modules/react-router-dom/es/HashRouter.js","./Link":"../node_modules/react-router-dom/es/Link.js","./MemoryRouter":"../node_modules/react-router-dom/es/MemoryRouter.js","./NavLink":"../node_modules/react-router-dom/es/NavLink.js","./Prompt":"../node_modules/react-router-dom/es/Prompt.js","./Redirect":"../node_modules/react-router-dom/es/Redirect.js","./Route":"../node_modules/react-router-dom/es/Route.js","./Router":"../node_modules/react-router-dom/es/Router.js","./StaticRouter":"../node_modules/react-router-dom/es/StaticRouter.js","./Switch":"../node_modules/react-router-dom/es/Switch.js","./generatePath":"../node_modules/react-router-dom/es/generatePath.js","./matchPath":"../node_modules/react-router-dom/es/matchPath.js","./withRouter":"../node_modules/react-router-dom/es/withRouter.js"}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -34971,19 +34954,36 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-exports.EmptyList = function (id, title) {
+exports.ListCreator = function (id, title) {
   return {
     id: id,
     title: title
   };
 };
 
-exports.Card = function (id, title, listId) {
+exports.Card = function (id, title, listId, description) {
+  if (description === void 0) {
+    description = "";
+  }
+
   return {
     id: id,
     title: title,
-    listId: listId
+    listId: listId,
+    description: description
   };
+};
+
+exports.stringNonEmpty = function (s) {
+  return typeof s === "string" && s.length > 0;
+};
+
+exports.isValidString = function (s, len) {
+  if (len === void 0) {
+    len = 255;
+  }
+
+  return exports.stringNonEmpty(s) && s.length <= len;
 };
 },{}],"views/BoardView.tsx":[function(require,module,exports) {
 "use strict";
@@ -35018,7 +35018,7 @@ var AddListButton_1 = require("../components/AddListButton");
 
 var List_1 = require("../components/List");
 
-var board_1 = require("../store/board");
+var app_1 = require("../store/app");
 
 var shortid_1 = __importDefault(require("shortid"));
 
@@ -35049,7 +35049,7 @@ var Board = function Board(_a) {
 
 var mapState = function mapState(s, op) {
   var bId = op.match.params.id;
-  var _a = s.board.boards[+bId],
+  var _a = s.app.boards[+bId],
       title = _a.title,
       lists = _a.lists,
       cards = _a.cards;
@@ -35064,25 +35064,25 @@ var mapDispatch = function mapDispatch(dispatch, op) {
   var boardId = op.match.params.id;
   return {
     addList: function addList(title) {
-      return dispatch(board_1.actions.addList({
+      return dispatch(app_1.actions.addList({
         boardId: boardId,
-        list: models_1.EmptyList(shortid_1.default.generate(), title)
+        list: models_1.ListCreator(shortid_1.default.generate(), title)
       }));
     },
     setEditedList: function setEditedList(list) {
-      return dispatch(board_1.actions.setEditedList({
+      return dispatch(app_1.actions.setEditedList({
         boardId: boardId,
         list: list
       }));
     },
     addCard: function addCard(title, listId) {
-      return dispatch(board_1.actions.addCard({
+      return dispatch(app_1.actions.addCard({
         boardId: boardId,
         card: models_1.Card(shortid_1.default.generate(), title, listId)
       }));
     },
     setEditedCard: function setEditedCard(card) {
-      return dispatch(board_1.actions.setEditedCard({
+      return dispatch(app_1.actions.setEditedCard({
         boardId: boardId,
         card: card
       }));
@@ -35091,7 +35091,7 @@ var mapDispatch = function mapDispatch(dispatch, op) {
 };
 
 exports.BoardView = react_redux_1.connect(mapState, mapDispatch)(Board);
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/board":"store/board.ts","shortid":"../node_modules/shortid/index.js","../models":"models/index.ts"}],"components/NoMatch.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","./BoardView.scss":"views/BoardView.scss","../components/AddListButton":"components/AddListButton.tsx","../components/List":"components/List.tsx","../store/app":"store/app.ts","shortid":"../node_modules/shortid/index.js","../models":"models/index.ts"}],"components/NoMatch.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -35123,7 +35123,65 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"../styles/normalize.scss":"styles/normalize.scss","_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/index.tsx":[function(require,module,exports) {
+},{"../styles/normalize.scss":"styles/normalize.scss","_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/MainView.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"../styles/normalize.scss":"styles/normalize.scss","_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/MainView.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var react_router_dom_1 = require("react-router-dom");
+
+var _1 = require(".");
+
+var react_redux_1 = require("react-redux");
+
+require("./MainView.scss");
+
+var Main = function Main(_a) {
+  var boards = _a.boards;
+  return React.createElement("div", {
+    className: "Main"
+  }, React.createElement("h1", {
+    className: "Main__Title"
+  }, "Trello-clone"), React.createElement("div", {
+    className: "Main__Boards"
+  }, boards.map(function (b) {
+    return React.createElement(react_router_dom_1.NavLink, {
+      className: "Tile",
+      key: b.id,
+      to: _1.routes.board(b.id)
+    }, React.createElement("div", {
+      className: "Tile__Title"
+    }, b.title));
+  })));
+};
+
+var mapState = function mapState(s) {
+  return {
+    boards: s.app.boards
+  };
+};
+
+exports.MainView = react_redux_1.connect(mapState, {})(Main);
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js",".":"views/index.tsx","react-redux":"../node_modules/react-redux/es/index.js","./MainView.scss":"views/MainView.scss"}],"views/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -35148,13 +35206,19 @@ var store_1 = require("../store");
 
 var connected_react_router_1 = require("connected-react-router");
 
-var Hello_1 = require("../components/Hello");
-
 var BoardView_1 = require("./BoardView");
 
 var NoMatch_1 = require("../components/NoMatch");
 
 require("./index.scss");
+
+var MainView_1 = require("./MainView");
+
+exports.routes = {
+  board: function board(id) {
+    return "/board/" + id;
+  }
+};
 
 exports.App = function () {
   return React.createElement(connected_react_router_1.ConnectedRouter, {
@@ -35162,7 +35226,7 @@ exports.App = function () {
   }, React.createElement(react_router_dom_1.Switch, null, React.createElement(react_router_dom_1.Route, {
     path: "/",
     key: "root",
-    component: Hello_1.Hello,
+    component: MainView_1.MainView,
     exact: true
   }), React.createElement(react_router_dom_1.Route, {
     path: "/board/:id",
@@ -35177,7 +35241,7 @@ exports.App = function () {
     to: "/404"
   })));
 };
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","../store":"store/index.ts","connected-react-router":"../node_modules/connected-react-router/esm/index.js","../components/Hello":"components/Hello.tsx","./BoardView":"views/BoardView.tsx","../components/NoMatch":"components/NoMatch.tsx","./index.scss":"views/index.scss"}],"index.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","../store":"store/index.ts","connected-react-router":"../node_modules/connected-react-router/esm/index.js","./BoardView":"views/BoardView.tsx","../components/NoMatch":"components/NoMatch.tsx","./index.scss":"views/index.scss","./MainView":"views/MainView.tsx"}],"index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importStar = this && this.__importStar || function (mod) {
@@ -35235,7 +35299,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50291" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55895" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

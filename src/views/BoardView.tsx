@@ -1,12 +1,12 @@
 import * as React from "react"
 import { connect } from "react-redux"
-import { RouteComponentProps } from "react-router"
+import { RouteComponentProps } from "react-router-dom"
 import "./BoardView.scss"
 import { AddListButton } from "../components/AddListButton"
 import { ListsView } from "../components/List"
-import { actions } from "../store/board"
+import { actions } from "../store/app"
 import shortId from "shortid"
-import { EmptyList, Card } from "../models"
+import { ListCreator, Card } from "../models"
 
 type BoardProps = {
     title: string
@@ -37,7 +37,7 @@ type BoardRouteProps = { id: string }
 type OwnProps = RouteComponentProps<BoardRouteProps>
 const mapState: MapState<BoardProps, OwnProps> = (s, op) => {
     const { id: bId } = op.match.params
-    const { title, lists, cards } = s.board.boards[+bId]
+    const { title, lists, cards } = s.app.boards[+bId]
 
     return {
         title,
@@ -49,7 +49,7 @@ const mapState: MapState<BoardProps, OwnProps> = (s, op) => {
 const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
     const boardId = op.match.params.id
     return {
-        addList: title => dispatch(actions.addList({ boardId, list: EmptyList(shortId.generate(), title) })),
+        addList: title => dispatch(actions.addList({ boardId, list: ListCreator(shortId.generate(), title) })),
         setEditedList: list => dispatch(actions.setEditedList({ boardId, list })),
         addCard: (title, listId) =>
             dispatch(actions.addCard({ boardId, card: Card(shortId.generate(), title, listId) })),

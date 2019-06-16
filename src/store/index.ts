@@ -2,7 +2,7 @@ import { install, combineReducers } from "redux-loop"
 import { Store, compose, createStore, applyMiddleware } from "redux"
 import { connectRouter, routerMiddleware } from "connected-react-router"
 import { createBrowserHistory } from "history"
-import * as board from "./board"
+import * as app from "./app"
 
 let _history: ReturnType<typeof createBrowserHistory> = null as any
 export const getHistory = () => {
@@ -12,12 +12,12 @@ export const getHistory = () => {
 
 let _store: Store<RootState> | null = null
 
-const initialState: RootState = { board: board.initialState, router: null }
+const initialState: RootState = { app: app.initialState, router: null }
 
 const initStore = () => {
     const { __REDUX_DEVTOOLS_EXTENSION__ = () => (f: any) => f } = window as any
     return createStore(
-        combineReducers<any>({ board: board.reducer, router: connectRouter(getHistory()) }),
+        combineReducers<any>({ app: app.reducer, router: connectRouter(getHistory()) }),
         initialState as any,
         compose(
             install(),
