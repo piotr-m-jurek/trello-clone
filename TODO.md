@@ -17,23 +17,28 @@
   - [x] Connect action
   - [x] card name validation
 - [ ] Edit list name
-- [ ] Edit card
+- [x] Edit card
+- [ ] Edit card styling
 
-- [ ] Default Redirect
+
 - [x] MatchBoardId better
-
 - [x] Bind board to route
 
 ### Additional
 
-- [ ] Boards view (boards)
+- [ ] Default Redirect??
+- [x] Boards view (boards)
 - [ ] new board creation
 - [ ] drag&drop research
 - [ ] drag&drop lists ( change )
+- [ ] drag&drop cards
 
 
 ### Potential Refactors
 
 - [ ] Definetely consider using maps instead of arrays for lists boards and cards
 - [ ] Consider using generic board reducer to avoid mapping over boards
-- [ ] 
+- [ ] default view for no board exisiting in the system
+- [ ] tests for mapBoard function from reducer
+- [ ] Cleanup in Card/List name edition
+- [ ]
