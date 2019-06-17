@@ -63,3 +63,9 @@ typings/
 # parcel cache
 .cache/**
 ./dist/tsc/*
+
+
+# Cypress videos
+
+cypress/videos/**
+cypress/screenshots/**
