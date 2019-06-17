@@ -8,7 +8,7 @@
         "build": "rm ./dist && npx parcel build src/index.html",
         "test:unit": "npx jest",
         "test:unit-watch": "npx jest --watch",
-        "test:e2e": "npx cypress run'",
+        "test:e2e": "npx cypress run",
         "test:e2e-dev": "npx cypress open",
         "test": "npm run test:unit && npm run test:e2e",
         "lint": "npx tslint --project tsconfig.json --format stylish --fix"
