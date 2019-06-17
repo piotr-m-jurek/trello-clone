@@ -35016,7 +35016,7 @@ var Card = function Card(_a) {
   }), React.createElement("button", {
     disabled: !models_1.isValidString(newTitle, 30),
     onClick: function onClick() {
-      onEdited(models_1.CardCreator(newTitle, listId, newDescription));
+      onEdited(models_1.CardCreator(id, newTitle, listId, newDescription));
       setEditingCard(false);
     }
   }, "Zapisz"));
