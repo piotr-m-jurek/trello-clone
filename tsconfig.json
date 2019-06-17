@@ -34,7 +34,7 @@
     "include": [
         "**/*.d.ts",
         "**/*.tsx",
-        "**/*.ts"
+        "**/*.ts", "cypress/support/commands.js"
     ],
     "exclude": [
         "node_modules/**",
