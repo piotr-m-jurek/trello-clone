@@ -21,7 +21,7 @@ const Card: React.FC<Card & CardActions> = ({ id, title, onEdited, listId, descr
             <input value={newTitle} onChange={e => setTitle(e.target.value)} />
             <textarea value={newDescription} onChange={e => setNewDescription(e.target.value)} />
             <button
-                disabled={isValidString(newTitle, 30)}
+                disabled={!isValidString(newTitle, 30)}
                 onClick={() => {
                     onEdited(CardCreator(newTitle, listId, newDescription))
                     setEditingCard(false)
@@ -32,10 +32,11 @@ const Card: React.FC<Card & CardActions> = ({ id, title, onEdited, listId, descr
     )
 }
 
-export const CardView: React.FC<{ cards: Card[]; onEdited: F1<Card> }> = ({ cards, onEdited }) => (
-    <>
-        {cards.map(c => (
-            <Card key={c.id} {...c} onEdited={onEdited} />
-        ))}
-    </>
-)
+export const CardView: React.FC<{ cards: Card[]; onEdited: F1<Card> }> = ({ cards, onEdited }) =>
+    cards.length > 0 ? (
+        <ul className="List__Cards">
+            {cards.map(c => (
+                <Card key={c.id} {...c} onEdited={onEdited} />
+            ))}
+        </ul>
+    ) : null

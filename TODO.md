@@ -15,6 +15,7 @@
   - [x] Connect action
   - [x] card name validation
 - [x] Edit card
+- [x] Edit list
 
 - [x] MatchBoardId better
 - [x] Bind board to route
@@ -24,11 +25,10 @@
 - [ ] [CSS] New Card
 - [ ] [CSS]Edit card
 - [ ] [CSS] Edit List
-- [ ] Edit list
 
 ## Additional
 
-- [ ] setup Cypress.io
+- [x] setup Cypress.io
 - [ ] Initial basic cypress tests
 
 - [x] setup hooks
@@ -56,3 +56,4 @@
 - [ ] tests for mapBoard function from reducer
 - [ ] Cleanup in Card/List name edition
 - [ ] Use ADTs instead of undefined/nullalbe values
+- [ ]

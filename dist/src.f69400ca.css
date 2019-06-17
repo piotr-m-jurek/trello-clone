@@ -13,11 +13,14 @@
   margin-left: 16px;
 }
 .Board__Lists {
+  height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   list-style: none;
   padding: 0;
+  overflow-x: auto;
 }
 .Board__Lists > * + * {
   margin-left: 8px;
@@ -54,7 +57,7 @@
 .List {
   display: flex;
   flex-direction: column;
-  width: 272px;
+  min-width: 272px;
   padding: 8px 8px 0 8px;
   background: #dfe1e6;
   border-radius: 4px;
@@ -63,7 +66,7 @@
 }
 .List__AddList {
   border: none;
-  width: 272px;
+  min-width: 272px;
   background-color: rgba(0, 0, 0, 0.12);
   cursor: pointer;
   color: rgba(255, 255, 255, 0.8);

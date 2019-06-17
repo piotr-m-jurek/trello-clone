@@ -33472,6 +33472,19 @@ exports.reducer = function (state, action) {
         }))
       });
 
+    case "setEditedList":
+      var editList_1 = function editList_1(l) {
+        return l.id === action.payload.list.id ? action.payload.list : l;
+      };
+
+      return ext({
+        boards: state.boards.map(mapBoard(action.payload.boardId)(function (b) {
+          return {
+            lists: b.lists.map(editList_1)
+          };
+        }))
+      });
+
     case "createBoard":
       return ext({
         boards: state.boards.concat([action.payload])
@@ -35001,7 +35014,7 @@ var Card = function Card(_a) {
       return setNewDescription(e.target.value);
     }
   }), React.createElement("button", {
-    disabled: models_1.isValidString(newTitle, 30),
+    disabled: !models_1.isValidString(newTitle, 30),
     onClick: function onClick() {
       onEdited(models_1.CardCreator(newTitle, listId, newDescription));
       setEditingCard(false);
@@ -35012,13 +35025,15 @@ var Card = function Card(_a) {
 exports.CardView = function (_a) {
   var cards = _a.cards,
       onEdited = _a.onEdited;
-  return React.createElement(React.Fragment, null, cards.map(function (c) {
+  return cards.length > 0 ? React.createElement("ul", {
+    className: "List__Cards"
+  }, cards.map(function (c) {
     return React.createElement(Card, __assign({
       key: c.id
     }, c, {
       onEdited: onEdited
     }));
-  }));
+  })) : null;
 };
 },{"react":"../node_modules/react/index.js","./Card.scss":"components/Card.scss","../models":"models/index.ts"}],"components/List.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
@@ -35027,6 +35042,22 @@ module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/List.tsx":[function(require,module,exports) {
 "use strict";
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
 
 var __importStar = this && this.__importStar || function (mod) {
   if (mod && mod.__esModule) return mod;
@@ -35050,54 +35081,76 @@ require("./List.scss");
 
 var models_1 = require("../models");
 
-var ListForm = function ListForm(_a) {
+var NewCardForm = function NewCardForm(_a) {
   var onSubmit = _a.onSubmit;
 
   var _b = React.useState(""),
-      listTitle = _b[0],
-      setListTitle = _b[1];
+      cardTitle = _b[0],
+      setCardTitle = _b[1];
 
-  return React.createElement(React.Fragment, null, React.createElement("input", {
+  var _c = React.useState(false),
+      cardEditing = _c[0],
+      setCardEditing = _c[1];
+
+  return cardEditing ? React.createElement(React.Fragment, null, React.createElement("input", {
     onChange: function onChange(e) {
-      return setListTitle(e.target.value);
+      setCardTitle(e.target.value);
     },
-    value: listTitle
+    value: cardTitle
   }), React.createElement("button", {
-    disabled: models_1.stringNonEmpty(listTitle),
+    disabled: !models_1.stringNonEmpty(cardTitle),
     onClick: function onClick() {
-      return onSubmit(listTitle);
+      onSubmit(cardTitle);
+      setCardEditing(false);
     }
-  }, "Dodaj"));
+  }, "Dodaj")) : React.createElement("button", {
+    className: "List__AddButton",
+    onClick: function onClick() {
+      return setCardEditing(true);
+    }
+  }, "+ Dodaj kolejn\u0105 kart\u0119");
 };
 
 var List = function List(_a) {
   var cards = _a.cards,
       list = _a.list,
       onCardSubmit = _a.onCardSubmit,
-      onCardEdited = _a.onCardEdited;
+      onCardEdited = _a.onCardEdited,
+      setEditedList = _a.setEditedList;
 
-  var _b = React.useState(false),
-      listEditing = _b[0],
-      setListEditing = _b[1];
+  var _b = React.useState(list.title),
+      listTitle = _b[0],
+      setListTitle = _b[1];
+
+  var _c = React.useState(false),
+      editingListTitle = _c[0],
+      setEditingListTitle = _c[1];
 
   return React.createElement("li", {
     className: "List"
-  }, React.createElement("h2", {
-    className: "List__Title"
-  }, list.title), cards.length > 0 ? React.createElement("ul", {
-    className: "List__Cards"
-  }, React.createElement(Card_1.CardView, {
+  }, !editingListTitle ? React.createElement("h2", {
+    className: "List__Title",
+    onClick: function onClick() {
+      return setEditingListTitle(true);
+    }
+  }, list.title) : React.createElement(React.Fragment, null, React.createElement("input", {
+    value: listTitle,
+    onChange: function onChange(e) {
+      return setListTitle(e.target.value);
+    }
+  }), React.createElement("button", {
+    onClick: function onClick() {
+      setEditedList(__assign({}, list, {
+        title: listTitle
+      }));
+      setEditingListTitle(false);
+    }
+  }, "Zapisz")), React.createElement(Card_1.CardView, {
     cards: cards,
     onEdited: onCardEdited
-  })) : null, !listEditing ? React.createElement("button", {
-    className: "List__AddButton",
-    onClick: function onClick() {
-      return setListEditing(true);
-    }
-  }, "+ Dodaj kolejn\u0105 kart\u0119") : React.createElement(ListForm, {
+  }), React.createElement(NewCardForm, {
     onSubmit: function onSubmit(s) {
       onCardSubmit(s);
-      setListEditing(false);
     }
   }));
 };
@@ -35106,7 +35159,8 @@ exports.ListsView = function (_a) {
   var lists = _a.lists,
       cards = _a.cards,
       _onCardSubmit = _a.onCardSubmit,
-      onCardEdited = _a.onCardEdited;
+      onCardEdited = _a.onCardEdited,
+      setEditedList = _a.setEditedList;
 
   var matchCardByListId = function matchCardByListId(colId) {
     return function (card) {
@@ -35122,7 +35176,8 @@ exports.ListsView = function (_a) {
       onCardSubmit: function onCardSubmit(t) {
         return _onCardSubmit(t, l.id);
       },
-      onCardEdited: onCardEdited
+      onCardEdited: onCardEdited,
+      setEditedList: setEditedList
     });
   }));
 };
@@ -35548,7 +35603,8 @@ var Board = function Board(p) {
     lists: p.value.lists,
     cards: p.value.cards,
     onCardSubmit: p.addCard,
-    onCardEdited: p.setEditedCard
+    onCardEdited: p.setEditedCard,
+    setEditedList: p.setEditedList
   }), React.createElement(AddListButton_1.AddListButton, {
     onClick: p.addList
   })));

@@ -9,7 +9,7 @@ import { ListCreator, CardCreator } from "../models"
 import { routes } from "."
 import * as shortid from "shortid"
 
-type BoardProps = Result<Board, null>
+type BoardProps = { type: "Ok"; value: Board } | { type: "Err"; error: null; obj: null }
 
 type ActionProps = {
     addList: F1<string>
@@ -35,6 +35,7 @@ const Board: React.FC<(BoardProps) & ActionProps> = p => {
                     cards={p.value.cards}
                     onCardSubmit={p.addCard}
                     onCardEdited={p.setEditedCard}
+                    setEditedList={p.setEditedList}
                 />
                 <AddListButton onClick={p.addList} />
             </ul>

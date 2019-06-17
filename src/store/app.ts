@@ -45,6 +45,11 @@ export const reducer: LoopReducer<AppState, Actions> = (state, action: Actions) 
             return ext({
                 boards: state.boards.map(mapBoard(action.payload.boardId)(b => ({ cards: b.cards.map(editCard) })))
             })
+        case "setEditedList":
+            const editList = (l: List) => (l.id === action.payload.list.id ? action.payload.list : l)
+            return ext({
+                boards: state.boards.map(mapBoard(action.payload.boardId)(b => ({ lists: b.lists.map(editList) })))
+            })
         case "createBoard":
             return ext({
                 boards: [...state.boards, action.payload]

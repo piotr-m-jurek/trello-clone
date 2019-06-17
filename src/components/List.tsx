@@ -10,43 +10,64 @@ type ListProps = {
 type ListActions = {
     onCardSubmit: F1<string>
     onCardEdited: F1<Card>
+    setEditedList: F1<List>
 }
 
-const ListForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
-    const [listTitle, setListTitle] = React.useState("")
-    return (
+const NewCardForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
+    const [cardTitle, setCardTitle] = React.useState("")
+    const [cardEditing, setCardEditing] = React.useState(false)
+    return cardEditing ? (
         <>
-            <input onChange={e => setListTitle(e.target.value)} value={listTitle} />
-            <button disabled={stringNonEmpty(listTitle)} onClick={() => onSubmit(listTitle)}>
+            <input
+                onChange={e => {
+                    setCardTitle(e.target.value)
+                }}
+                value={cardTitle}
+            />
+            <button
+                disabled={!stringNonEmpty(cardTitle)}
+                onClick={() => {
+                    onSubmit(cardTitle)
+                    setCardEditing(false)
+                }}>
                 Dodaj
             </button>
         </>
+    ) : (
+        <button className="List__AddButton" onClick={() => setCardEditing(true)}>
+            + Dodaj kolejną kartę
+        </button>
     )
 }
 
-const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit, onCardEdited }) => {
-    const [listEditing, setListEditing] = React.useState(false)
-
+const List: React.FC<ListProps & ListActions> = ({ cards, list, onCardSubmit, onCardEdited, setEditedList }) => {
+    const [listTitle, setListTitle] = React.useState(list.title)
+    const [editingListTitle, setEditingListTitle] = React.useState(false)
     return (
         <li className="List">
-            <h2 className="List__Title">{list.title}</h2>
-            {cards.length > 0 ? (
-                <ul className="List__Cards">
-                    <CardView cards={cards} onEdited={onCardEdited} />
-                </ul>
-            ) : null}
-            {!listEditing ? (
-                <button className="List__AddButton" onClick={() => setListEditing(true)}>
-                    + Dodaj kolejną kartę
-                </button>
+            {!editingListTitle ? (
+                <h2 className="List__Title" onClick={() => setEditingListTitle(true)}>
+                    {list.title}
+                </h2>
             ) : (
-                <ListForm
-                    onSubmit={s => {
-                        onCardSubmit(s)
-                        setListEditing(false)
-                    }}
-                />
+                <>
+                    <input value={listTitle} onChange={e => setListTitle(e.target.value)} />
+                    <button
+                        onClick={() => {
+                            setEditedList({ ...list, title: listTitle })
+                            setEditingListTitle(false)
+                        }}>
+                        Zapisz
+                    </button>
+                </>
             )}
+
+            <CardView cards={cards} onEdited={onCardEdited} />
+            <NewCardForm
+                onSubmit={s => {
+                    onCardSubmit(s)
+                }}
+            />
         </li>
     )
 }
@@ -56,9 +77,10 @@ type ListViewProps = {
     cards: Card[]
     onCardSubmit: F2<string, string>
     onCardEdited: F1<Card>
+    setEditedList: F1<List>
 }
 
-export const ListsView: React.FC<ListViewProps> = ({ lists, cards, onCardSubmit, onCardEdited }) => {
+export const ListsView: React.FC<ListViewProps> = ({ lists, cards, onCardSubmit, onCardEdited, setEditedList }) => {
     const matchCardByListId = (colId: string) => (card: Card) => card.listId === colId
     return (
         <>
@@ -69,6 +91,7 @@ export const ListsView: React.FC<ListViewProps> = ({ lists, cards, onCardSubmit,
                     cards={cards.filter(matchCardByListId(l.id))}
                     onCardSubmit={t => onCardSubmit(t, l.id)}
                     onCardEdited={onCardEdited}
+                    setEditedList={setEditedList}
                 />
             ))}
         </>

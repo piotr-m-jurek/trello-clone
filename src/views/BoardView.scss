@@ -12,11 +12,14 @@
         }
     }
     &__Lists {
+        height: 100%;
+        width: 100%;
         display: flex;
         flex-direction: row;
         align-items: flex-start;
         list-style: none;
         padding: 0;
+        overflow-x: auto;
 
         > * + * {
             margin-left: 8px;
