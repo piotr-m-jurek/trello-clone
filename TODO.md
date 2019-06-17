@@ -29,9 +29,10 @@
 ## Additional
 
 - [x] setup Cypress.io
-- [ ] Initial basic cypress tests
+- [x] Initial basic cypress tests
+- [ ] cypress typescript integration
 
-- [x] setup hooks
+- [x] setup git hooks with husky
 - [x] linting & testing on hooks
 
 

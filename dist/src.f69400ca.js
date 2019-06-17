@@ -35751,8 +35751,8 @@ var Main = function Main(_a) {
       return setBoardEditing(true);
     }
   }, React.createElement("div", {
-    className: "Tile__Title"
-  }, "+ Dodaj now\u0105 tablic\u0119")) : React.createElement(React.Fragment, null, React.createElement("input", {
+    className: "NewBoard__Title"
+  }, "+ Dodaj")) : React.createElement(React.Fragment, null, React.createElement("input", {
     value: boardTitle,
     onChange: function onChange(e) {
       return setBoardTitle(e.target.value);

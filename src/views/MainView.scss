@@ -35,4 +35,15 @@
             color: #fff;
         }
     }
+    &.NewBoard {
+        background: #fff;
+        .NewBoard__Title {
+            color: $c-primary;
+            font-size: 24px;
+            font-weight: bold;
+        &:visited, &:active, &:focus {
+            color: $c-primary;
+        }
+        }
+    }
 }

@@ -30,7 +30,7 @@ const Main: React.FC<MainProps & MainActions> = ({ boards, createBoard }) => {
                 ))}
                 {!boardEditing ? (
                     <button className="Tile NewBoard" onClick={() => setBoardEditing(true)}>
-                        <div className="Tile__Title">+ Dodaj nową tablicę</div>
+                        <div className="NewBoard__Title">+ Dodaj</div>
                     </button>
                 ) : (
                     <>
