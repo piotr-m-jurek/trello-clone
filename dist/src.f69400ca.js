@@ -35588,7 +35588,7 @@ var _1 = require(".");
 var shortid = __importStar(require("shortid"));
 
 var Board = function Board(p) {
-  return p.type === "Err" ? React.createElement("h1", null, "Tablica nie istnieje") : React.createElement("div", {
+  return p == null ? React.createElement("h1", null, "Tablica nie istnieje") : React.createElement("div", {
     className: "Board"
   }, React.createElement("div", {
     className: "Board__Header"
@@ -35597,11 +35597,11 @@ var Board = function Board(p) {
     to: _1.routes.root
   }, "\uD83D\uDC48"), React.createElement("h1", {
     className: "Header__Title"
-  }, p.value.title)), React.createElement("ul", {
+  }, p.title)), React.createElement("ul", {
     className: "Board__Lists"
   }, React.createElement(List_1.ListsView, {
-    lists: p.value.lists,
-    cards: p.value.cards,
+    lists: p.lists,
+    cards: p.cards,
     onCardSubmit: p.addCard,
     onCardEdited: p.setEditedCard,
     setEditedList: p.setEditedList
@@ -35615,14 +35615,7 @@ var mapState = function mapState(s, op) {
   var board = s.app.boards.find(function (b) {
     return b.id === bId;
   });
-  return board ? {
-    type: "Ok",
-    value: board
-  } : {
-    type: "Err",
-    error: null,
-    obj: null
-  };
+  return board ? board : null;
 };
 
 var mapDispatch = function mapDispatch(dispatch, op) {

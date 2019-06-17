@@ -9,7 +9,7 @@ import { ListCreator, CardCreator } from "../models"
 import { routes } from "."
 import * as shortid from "shortid"
 
-type BoardProps = { type: "Ok"; value: Board } | { type: "Err"; error: null; obj: null }
+type BoardProps = Board | null
 
 type ActionProps = {
     addList: F1<string>
@@ -19,7 +19,7 @@ type ActionProps = {
 }
 
 const Board: React.FC<(BoardProps) & ActionProps> = p => {
-    return p.type === "Err" ? (
+    return p == null ? (
         <h1>Tablica nie istnieje</h1>
     ) : (
         <div className="Board">
@@ -27,12 +27,12 @@ const Board: React.FC<(BoardProps) & ActionProps> = p => {
                 <NavLink className="Header__HomeBtn" to={routes.root}>
                     👈
                 </NavLink>
-                <h1 className="Header__Title">{p.value.title}</h1>
+                <h1 className="Header__Title">{p.title}</h1>
             </div>
             <ul className="Board__Lists">
                 <ListsView
-                    lists={p.value.lists}
-                    cards={p.value.cards}
+                    lists={p.lists}
+                    cards={p.cards}
                     onCardSubmit={p.addCard}
                     onCardEdited={p.setEditedCard}
                     setEditedList={p.setEditedList}
@@ -49,12 +49,7 @@ const mapState: MapState<BoardProps, OwnProps> = (s, op) => {
     const { id: bId } = op.match.params
     const board = s.app.boards.find(b => b.id === bId)!
 
-    return board
-        ? {
-              type: "Ok",
-              value: board
-          }
-        : { type: "Err", error: null, obj: null }
+    return board ? board : null
 }
 
 const mapDispatch: MapDispatch<ActionProps, OwnProps> = (dispatch, op) => {
