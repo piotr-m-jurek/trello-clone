@@ -13,7 +13,7 @@ type ListActions = {
     setEditedList: F1<List>
 }
 
-const NewCardForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
+export const NewCardForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
     const [cardTitle, setCardTitle] = React.useState("")
     const [cardEditing, setCardEditing] = React.useState(false)
     return cardEditing ? (
@@ -28,6 +28,7 @@ const NewCardForm: React.FC<{ onSubmit: F1<string> }> = ({ onSubmit }) => {
                 disabled={!stringNonEmpty(cardTitle)}
                 onClick={() => {
                     onSubmit(cardTitle)
+                    setCardTitle("")
                     setCardEditing(false)
                 }}>
                 Dodaj
